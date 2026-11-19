@@ -1,5 +1,15 @@
 {
-  "scopes": [],
+  "xsappname": "purchase-order-processing-05a6e673trial-dev",
+  "tenant-mode": "dedicated",
+  "scopes": [
+    {
+      "name": "$XSAPPNAME.JobScheduler",
+      "description": "Allows SAP Job Scheduling Service to execute scheduled jobs",
+      "grant-as-authority-to-apps": [
+        "$XSSERVICENAME(purchase-order-daily-scheduler)"
+      ]
+    }
+  ],
   "attributes": [],
   "role-templates": []
 }

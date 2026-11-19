@@ -2072,4 +2072,69 @@ module.exports = cds.service.impl(async function () {
     }
   );
 
+    // ============================================================
+  // DAILY APPROVAL MONITOR — READ ONLY
+  // ============================================================
+
+  this.on("runDailyApprovalCheck", async (req) => {
+    const executedAt = new Date().toISOString();
+
+    try {
+      const pendingOrders = await cds.db.run(
+        SELECT.from(PurchaseOrders)
+          .columns(
+            "poNumber",
+            "status",
+            "approvalStatus",
+            "createdBy",
+            "documentDate"
+          )
+          .where({
+            status: "Pending Approval"
+          })
+      );
+
+      const pendingApprovals = await cds.db.run(
+        SELECT.from(Approvals)
+          .columns(
+            "approvalId",
+            "poNumber",
+            "approver",
+            "status",
+            "createdOn"
+          )
+          .where({
+            status: "Pending"
+          })
+      );
+
+      const report = {
+        job: "Daily Purchase Order Approval Monitor",
+        executionTime: executedAt,
+        result: "SUCCESS",
+        pendingPurchaseOrderCount: pendingOrders.length,
+        pendingApprovalRecordCount: pendingApprovals.length,
+        pendingPurchaseOrders: pendingOrders,
+        pendingApprovalRecords: pendingApprovals
+      };
+
+      console.log(
+        "[DAILY APPROVAL MONITOR]",
+        JSON.stringify(report)
+      );
+
+      return JSON.stringify(report);
+
+    } catch (error) {
+      console.error(
+        "[DAILY APPROVAL MONITOR] Failed:",
+        error
+      );
+
+      return req.reject(
+        500,
+        "Daily approval monitoring failed."
+      );
+    }
+  });
 });

@@ -91,4 +91,12 @@ service PurchaseOrderService {
     poNumber : String(10)
   ) returns String;
 
+
+  // ============================================================
+  // DAILY APPROVAL MONITOR — READ ONLY
+  // ============================================================
+
+  @requires: 'JobScheduler'
+  action runDailyApprovalCheck() returns String;
 }
+
