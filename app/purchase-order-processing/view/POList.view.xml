@@ -1,0 +1,227 @@
+<mvc:View
+    controllerName="purchaseorderprocessing.controller.POList"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+
+    <Page
+        showHeader="false"
+        class="pageBackground">
+
+        <content>
+            <VBox class="sapUiSmallMargin">
+
+                <!-- Top Toolbar -->
+                <Toolbar class="appToolbar">
+                    <Button
+                        icon="sap-icon://nav-back"
+                        type="Transparent"
+                        press=".onBack"/>
+
+                    <Title text="Purchase Orders"/>
+
+                    <ToolbarSpacer/>
+
+                    <Button
+                        icon="sap-icon://refresh"
+                        type="Transparent"
+                        press=".onRefresh"/>
+
+                    <Avatar
+                        initials="SP"
+                        displaySize="XS"/>
+                </Toolbar>
+
+                <!-- Page Header -->
+                <Toolbar>
+                    <Title
+                        text="Purchase Orders"
+                        level="H1"/>
+
+                    <ToolbarSpacer/>
+
+                    <Button
+                        text="Create Purchase Order"
+                        icon="sap-icon://add"
+                        type="Emphasized"
+                        press=".onCreate"/>
+                </Toolbar>
+
+                <!-- Filters -->
+                <Panel
+                    class="filterPanel"
+                    expandable="true"
+                    expanded="true">
+
+                    <content>
+                        <HBox
+                            wrap="Wrap"
+                            alignItems="End">
+
+                            <VBox class="filterField">
+                                <Label text="Purchase Order"/>
+                                <Input
+                                    value="{filters>/po}"
+                                    placeholder="45000123"/>
+                            </VBox>
+
+                            <VBox class="filterField">
+                                <Label text="Supplier"/>
+
+                                <ComboBox
+                                    selectedKey="{filters>/supplier}"
+                                    items="{list>/suppliers}">
+
+                                    <core:Item
+                                        key="{list>ID}"
+                                        text="{list>name}"/>
+
+                                </ComboBox>
+                            </VBox>
+
+                            <VBox class="filterField">
+                                <Label text="Status"/>
+
+                                <ComboBox
+                                    selectedKey="{filters>/status}">
+
+                                    <core:Item
+                                        key=""
+                                        text="All"/>
+
+                                    <core:Item
+                                        key="Released"
+                                        text="Released"/>
+
+                                    <core:Item
+                                        key="Pending"
+                                        text="Pending"/>
+
+                                    <core:Item
+                                        key="Blocked"
+                                        text="Blocked"/>
+
+                                    <core:Item
+                                        key="Rejected"
+                                        text="Rejected"/>
+
+                                    <core:Item
+                                        key="Cancelled"
+                                        text="Cancelled"/>
+
+                                </ComboBox>
+                            </VBox>
+
+                            <VBox class="filterField">
+                                <Label text="Company Code"/>
+
+                                <Input
+                                    value="{filters>/companyCode}"
+                                    placeholder="1000"/>
+                            </VBox>
+
+                            <Button
+                                text="Go"
+                                type="Emphasized"
+                                press=".onSearch"
+                                class="sapUiSmallMarginBegin"/>
+
+                            <Button
+                                text="Clear"
+                                type="Transparent"
+                                press=".onClear"/>
+
+                        </HBox>
+                    </content>
+                </Panel>
+
+                <!-- Purchase Order Table -->
+                <VBox
+                    class="contentCard sapUiSmallMarginTop">
+
+                    <Toolbar>
+                        <Title text="Purchase Orders"/>
+
+                        <ToolbarSpacer/>
+
+                        <Text text="{list>/countText}"/>
+                    </Toolbar>
+
+                    <Table
+                        id="poTable"
+                        items="{list>/items}"
+                        growing="true"
+                        growingThreshold="20">
+
+                        <columns>
+
+                            <Column>
+                                <Text text="PO Number"/>
+                            </Column>
+
+                            <Column>
+                                <Text text="Supplier"/>
+                            </Column>
+
+                            <Column>
+                                <Text text="Order Date"/>
+                            </Column>
+
+                            <Column>
+                                <Text text="Company Code"/>
+                            </Column>
+
+                            <Column>
+                                <Text text="Net Value"/>
+                            </Column>
+
+                            <Column>
+                                <Text text="Status"/>
+                            </Column>
+
+                        </columns>
+
+                        <items>
+
+                            <ColumnListItem
+                                type="Navigation"
+                                press=".onPOPress">
+
+                                <cells>
+
+                                    <Link
+                                        text="{list>poNumber}"/>
+
+                                    <Text
+                                        text="{list>supplierName}"/>
+
+                                    <Text
+                                        text="{list>documentDate}"/>
+
+                                    <Text
+                                        text="{list>companyCode}"/>
+
+                                    <ObjectNumber
+                                        number="{list>netValue}"
+                                        unit="₹"/>
+
+                                    <ObjectStatus
+                                        text="{list>status}"
+                                        state="{path:'list>status', formatter:'.statusState'}"/>
+
+                                </cells>
+
+                            </ColumnListItem>
+
+                        </items>
+
+                    </Table>
+
+                </VBox>
+
+            </VBox>
+        </content>
+
+    </Page>
+
+</mvc:View>

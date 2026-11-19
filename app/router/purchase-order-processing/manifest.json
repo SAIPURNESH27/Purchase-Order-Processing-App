@@ -1,0 +1,178 @@
+{
+  "_version": "1.65.0",
+
+  "sap.app": {
+    "id": "purchaseorderprocessing",
+    "type": "application",
+
+    "applicationVersion": {
+      "version": "3.0.0"
+    },
+
+    "title": "Purchase Order Processing",
+
+    "description": "End-to-end Purchase Order Processing",
+
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v4/purchase-order-service/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "4.0"
+        }
+      }
+    }
+  },
+
+  "sap.ui": {
+    "technology": "UI5",
+
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+
+  "sap.ui5": {
+
+    "rootView": {
+      "viewName": "purchaseorderprocessing.view.App",
+      "type": "XML",
+      "async": true,
+      "id": "app"
+    },
+
+    "dependencies": {
+
+      "minUI5Version": "1.120.0",
+
+      "libs": {
+        "sap.m": {},
+        "sap.f": {},
+        "sap.ui.core": {},
+        "sap.ui.layout": {},
+        "sap.tnt": {},
+        "sap.viz": {}
+      }
+
+    },
+
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+
+    "routing": {
+
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "viewType": "XML",
+        "viewPath": "purchaseorderprocessing.view",
+        "controlId": "app",
+        "controlAggregation": "pages",
+        "async": true
+      },
+
+      "routes": [
+
+        {
+          "pattern": "",
+          "name": "main",
+          "target": "main"
+        },
+
+        {
+          "pattern": "purchase-orders",
+          "name": "poList",
+          "target": "poList"
+        },
+
+        {
+          "pattern": "purchase-orders/{poNumber}",
+          "name": "poDetail",
+          "target": "poDetail"
+        },
+
+        {
+          "pattern": "purchase-orders/{poNumber}/goods-receipt",
+          "name": "goodsReceipt",
+          "target": "goodsReceipt"
+        },
+
+        {
+          "pattern": "create",
+          "name": "createPO",
+          "target": "createPO"
+        },
+
+        {
+          "pattern": "edit/{poNumber}",
+          "name": "editPO",
+          "target": "createPO"
+        },
+
+        {
+          "pattern": "suppliers",
+          "name": "suppliers",
+          "target": "suppliers"
+        },
+
+        {
+          "pattern": "approvals",
+          "name": "approvals",
+          "target": "approvals"
+        },
+
+        {
+          "pattern": "reports",
+          "name": "reports",
+          "target": "reports"
+        }
+
+      ],
+
+      "targets": {
+
+        "main": {
+          "viewName": "Main"
+        },
+
+        "poList": {
+          "viewName": "POList"
+        },
+
+        "poDetail": {
+          "viewName": "PODetail"
+        },
+
+        "goodsReceipt": {
+          "viewName": "GoodsReceipt"
+        },
+
+        "createPO": {
+          "viewName": "CreatePO"
+        },
+
+        "suppliers": {
+          "viewName": "Supplier"
+        },
+
+        "approvals": {
+          "viewName": "Approval"
+        },
+
+        "reports": {
+          "viewName": "Reports"
+        }
+
+      }
+
+    }
+
+  }
+
+}

@@ -1,0 +1,514 @@
+<mvc:View
+    controllerName="purchaseorderprocessing.controller.CreatePO"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+
+    <Page
+        showHeader="false"
+        class="pageBackground">
+
+        <content>
+
+            <VBox class="sapUiSmallMargin">
+
+                <!-- =====================================================
+                     TOP TOOLBAR
+                     ===================================================== -->
+
+                <Toolbar class="appToolbar">
+
+                    <Button
+                        icon="sap-icon://nav-back"
+                        type="Transparent"
+                        press=".onCancel"/>
+
+                    <Title
+                        text="Purchase Orders"/>
+
+                    <ToolbarSpacer/>
+
+                    <Avatar
+                        initials="SP"
+                        displaySize="XS"/>
+
+                </Toolbar>
+
+
+                <!-- =====================================================
+                     PAGE HEADER
+                     ===================================================== -->
+
+                <Toolbar>
+
+                    <Title
+                        text="{= ${form>/editMode} ? 'Edit Purchase Order ' + ${form>/poNumber} : 'Create Purchase Order'}"
+                        level="H1"/>
+
+                    <ToolbarSpacer/>
+
+
+                    <!-- STATUS -->
+
+                    <ObjectStatus
+                        text="{form>/status}"
+                        state="{= ${form>/status} === 'Draft' ? 'None' : ${form>/status} === 'Submitted' ? 'Information' : ${form>/status} === 'Pending Approval' ? 'Warning' : ${form>/status} === 'Approved' ? 'Success' : ${form>/status} === 'Released' ? 'Success' : ${form>/status} === 'Rejected' ? 'Error' : ${form>/status} === 'Cancelled' ? 'Error' : 'None'}"
+                        class="sapUiSmallMarginEnd"/>
+
+
+                    <!-- SAVE -->
+
+                    <Button
+                        text="Save Draft"
+                        icon="sap-icon://save"
+                        type="Emphasized"
+                        enabled="{form>/canSave}"
+                        busy="{form>/saving}"
+                        press=".onSave"/>
+
+
+                    <!-- SUBMIT -->
+
+                    <Button
+                        text="Submit"
+                        icon="sap-icon://paper-plane"
+                        type="Accept"
+                        enabled="{form>/canSubmit}"
+                        busy="{form>/submitting}"
+                        class="sapUiTinyMarginBegin"
+                        press=".onSubmit"/>
+
+
+                    <!-- SEND FOR APPROVAL -->
+
+                    <Button
+                        text="Send for Approval"
+                        icon="sap-icon://approvals"
+                        type="Accept"
+                        enabled="{form>/canSendForApproval}"
+                        busy="{form>/submitting}"
+                        class="sapUiTinyMarginBegin"
+                        press=".onSendForApproval"/>
+
+
+                    <!-- CANCEL -->
+
+                    <Button
+                        text="Cancel"
+                        type="Transparent"
+                        press=".onCancel"
+                        class="sapUiTinyMarginBegin"/>
+
+                </Toolbar>
+
+
+                <!-- =====================================================
+                     WORKFLOW MESSAGE
+                     ===================================================== -->
+
+                <MessageStrip
+                    text="{= ${form>/status} === 'Draft'
+                        ? 'This Purchase Order is in Draft status. Save your changes and submit it when ready.'
+                        : ${form>/status} === 'Submitted'
+                        ? 'This Purchase Order has been submitted. Send it for approval to start the manager approval workflow.'
+                        : ${form>/status} === 'Pending Approval'
+                        ? 'This Purchase Order is pending approval. Editing is disabled until the approval decision is completed.'
+                        : ${form>/status} === 'Approved'
+                        ? 'This Purchase Order has been approved and is ready for release.'
+                        : ${form>/status} === 'Released'
+                        ? 'This Purchase Order has been released and is ready for goods receipt.'
+                        : ${form>/status} === 'Rejected'
+                        ? 'This Purchase Order was rejected and cannot be edited in its current lifecycle state.'
+                        : 'This Purchase Order is in ' + ${form>/status} + ' status.'}"
+                    type="{= ${form>/status} === 'Draft'
+                        ? 'Information'
+                        : ${form>/status} === 'Pending Approval'
+                        ? 'Warning'
+                        : ${form>/status} === 'Rejected' || ${form>/status} === 'Cancelled'
+                        ? 'Error'
+                        : 'Success'}"
+                    showIcon="true"
+                    class="sapUiSmallMarginBottom"/>
+
+
+                <!-- =====================================================
+                     BASIC + ADDITIONAL INFORMATION
+                     ===================================================== -->
+
+                <HBox
+                    wrap="Wrap">
+
+
+                    <!-- =================================================
+                         BASIC INFORMATION
+                         ================================================= -->
+
+                    <VBox
+                        width="49%"
+                        class="contentCard sapUiTinyMarginEnd">
+
+                        <Title
+                            text="Basic Information"
+                            level="H3"/>
+
+
+                        <!-- Supplier -->
+
+                        <Label
+                            text="Supplier *"/>
+
+                        <ComboBox
+                            selectedKey="{form>/supplierId}"
+                            items="{form>/suppliers}"
+                            width="100%"
+                            enabled="{form>/canEdit}">
+
+                            <core:Item
+                                key="{form>ID}"
+                                text="{form>name}"/>
+
+                        </ComboBox>
+
+
+                        <!-- Company Code -->
+
+                        <Label
+                            text="Company Code *"
+                            class="formLabel"/>
+
+                        <Input
+                            value="{form>/companyCode}"
+                            editable="{form>/canEdit}"/>
+
+
+                        <!-- Purchasing Organization -->
+
+                        <Label
+                            text="Purchasing Organization *"
+                            class="formLabel"/>
+
+                        <Input
+                            value="{form>/purchasingOrg}"
+                            editable="{form>/canEdit}"/>
+
+
+                        <!-- Purchasing Group -->
+
+                        <Label
+                            text="Purchasing Group *"
+                            class="formLabel"/>
+
+                        <Input
+                            value="{form>/purchasingGroup}"
+                            editable="{form>/canEdit}"/>
+
+
+                        <!-- Document Date -->
+
+                        <Label
+                            text="Document Date *"
+                            class="formLabel"/>
+
+                        <DatePicker
+                            value="{form>/documentDate}"
+                            valueFormat="yyyy-MM-dd"
+                            displayFormat="dd MMM yyyy"
+                            width="100%"
+                            editable="{form>/canEdit}"/>
+
+
+                        <!-- Currency -->
+
+                        <Label
+                            text="Currency"
+                            class="formLabel"/>
+
+                        <Input
+                            value="{form>/currency}"
+                            editable="false"/>
+
+                    </VBox>
+
+
+                    <!-- =================================================
+                         ADDITIONAL INFORMATION
+                         ================================================= -->
+
+                    <VBox
+                        width="49%"
+                        class="contentCard">
+
+                        <Title
+                            text="Additional Information"
+                            level="H3"/>
+
+
+                        <!-- PO Type -->
+
+                        <Label
+                            text="Purchase Order Type"/>
+
+                        <Input
+                            value="{form>/poType}"
+                            editable="{form>/canEdit}"/>
+
+
+                        <!-- Delivery Date -->
+
+                        <Label
+                            text="Delivery Date"
+                            class="formLabel"/>
+
+                        <DatePicker
+                            value="{form>/deliveryDate}"
+                            valueFormat="yyyy-MM-dd"
+                            displayFormat="dd MMM yyyy"
+                            width="100%"
+                            editable="{form>/canEdit}"/>
+
+
+                        <!-- Payment Terms -->
+
+                        <Label
+                            text="Payment Terms"
+                            class="formLabel"/>
+
+                        <Input
+                            value="{form>/paymentTerms}"
+                            editable="{form>/canEdit}"/>
+
+
+                        <!-- Incoterms -->
+
+                        <Label
+                            text="Incoterms"
+                            class="formLabel"/>
+
+                        <Input
+                            value="{form>/incoterms}"
+                            editable="{form>/canEdit}"/>
+
+
+                        <!-- Reference -->
+
+                        <Label
+                            text="Reference"
+                            class="formLabel"/>
+
+                        <Input
+                            value="{form>/reference}"
+                            editable="{form>/canEdit}"/>
+
+
+                        <!-- Note -->
+
+                        <Label
+                            text="Note"
+                            class="formLabel"/>
+
+                        <TextArea
+                            value="{form>/note}"
+                            rows="3"
+                            width="100%"
+                            editable="{form>/canEdit}"/>
+
+                    </VBox>
+
+                </HBox>
+
+
+                <!-- =====================================================
+                     ITEMS SECTION
+                     ===================================================== -->
+
+                <VBox
+                    class="contentCard sapUiSmallMarginTop">
+
+
+                    <!-- Items Header -->
+
+                    <Toolbar>
+
+                        <Title
+                            text="Items"
+                            level="H3"/>
+
+                        <ToolbarSpacer/>
+
+                        <Button
+                            text="Add Item"
+                            icon="sap-icon://add"
+                            type="Transparent"
+                            enabled="{form>/canEdit}"
+                            press=".onAddItem"/>
+
+                    </Toolbar>
+
+
+                    <!-- =================================================
+                         ITEMS TABLE
+                         ================================================= -->
+
+                    <Table
+                        id="itemsTable"
+                        items="{form>/items}"
+                        growing="true"
+                        growingThreshold="20">
+
+                        <columns>
+
+                            <Column>
+                                <Text text="Item"/>
+                            </Column>
+
+                            <Column>
+                                <Text text="Material *"/>
+                            </Column>
+
+                            <Column>
+                                <Text text="Description"/>
+                            </Column>
+
+                            <Column>
+                                <Text text="Quantity *"/>
+                            </Column>
+
+                            <Column>
+                                <Text text="Unit"/>
+                            </Column>
+
+                            <Column>
+                                <Text text="Unit Price *"/>
+                            </Column>
+
+                            <Column>
+                                <Text text="Net Value"/>
+                            </Column>
+
+                            <Column
+                                width="3rem"
+                                hAlign="Center">
+
+                                <Text text=""/>
+
+                            </Column>
+
+                        </columns>
+
+
+                        <!-- =================================================
+                             ITEM ROW
+                             ================================================= -->
+
+                        <items>
+
+                            <ColumnListItem>
+
+                                <cells>
+
+                                    <!-- Item -->
+
+                                    <Text
+                                        text="{form>itemNo}"/>
+
+
+                                    <!-- Material -->
+
+                                    <Input
+                                        value="{form>material}"
+                                        width="100%"
+                                        editable="{form>/canEdit}"/>
+
+
+                                    <!-- Description -->
+
+                                    <Input
+                                        value="{form>description}"
+                                        width="100%"
+                                        editable="{form>/canEdit}"/>
+
+
+                                    <!-- Quantity -->
+
+                                    <Input
+                                        value="{form>quantity}"
+                                        type="Number"
+                                        liveChange=".onItemChange"
+                                        width="100%"
+                                        editable="{form>/canEdit}"/>
+
+
+                                    <!-- Unit -->
+
+                                    <Input
+                                        value="{form>unit}"
+                                        width="100%"
+                                        editable="{form>/canEdit}"/>
+
+
+                                    <!-- Unit Price -->
+
+                                    <Input
+                                        value="{form>unitPrice}"
+                                        type="Number"
+                                        liveChange=".onItemChange"
+                                        width="100%"
+                                        editable="{form>/canEdit}"/>
+
+
+                                    <!-- Net Value -->
+
+                                    <ObjectNumber
+                                        number="{form>netValue}"
+                                        unit="₹"/>
+
+
+                                    <!-- Delete -->
+
+                                    <Button
+                                        icon="sap-icon://delete"
+                                        type="Transparent"
+                                        tooltip="Delete Item"
+                                        enabled="{form>/canEdit}"
+                                        press=".onDeleteItem"/>
+
+                                </cells>
+
+                            </ColumnListItem>
+
+                        </items>
+
+                    </Table>
+
+
+                    <!-- =================================================
+                         TOTALS
+                         ================================================= -->
+
+                    <VBox
+                        alignItems="End"
+                        class="totalsBox">
+
+                        <ObjectAttribute
+                            title="Net Value"
+                            text="₹ {form>/netValue}"/>
+
+                        <ObjectAttribute
+                            title="Tax (GST 18%)"
+                            text="₹ {form>/tax}"/>
+
+                        <ObjectAttribute
+                            title="Total Value"
+                            text="₹ {form>/totalValue}"/>
+
+                    </VBox>
+
+                </VBox>
+
+            </VBox>
+
+        </content>
+
+    </Page>
+
+</mvc:View>

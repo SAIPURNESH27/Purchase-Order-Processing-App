@@ -1,0 +1,6 @@
+specVersion: "3.0"
+metadata:
+  name: purchaseorderprocessing
+type: application
+server:
+  customMiddleware: []

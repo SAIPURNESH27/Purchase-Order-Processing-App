@@ -1,0 +1,32 @@
+# Node modules
+node_modules/
+
+# CAP generated files
+gen/
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Build files
+mta_archives/
+*.mtar
+dist/
+
+# Logs
+*.log
+npm-debug.log*
+
+# BAS and IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db

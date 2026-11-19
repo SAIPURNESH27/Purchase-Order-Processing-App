@@ -1,0 +1,455 @@
+html,
+body,
+#content {
+    height: 100%;
+    margin: 0;
+}
+
+
+/* =========================================================
+   GENERAL
+   ========================================================= */
+
+.pageBackground {
+    background: #f5f6f7;
+}
+
+.appToolbar {
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    min-height: 3.25rem;
+}
+
+.sapTitle {
+    font-weight: 700;
+    color: #0a6ed1;
+}
+
+.toolbarSection {
+    font-size: 1rem;
+}
+
+.contentArea {
+    min-height: calc(100vh - 7rem);
+}
+
+.sideNavCard {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    padding: 0.5rem;
+}
+
+.sideNavCard .sapMBtn {
+    width: 100%;
+    text-align: left;
+}
+
+
+/* =========================================================
+   TOOLBAR
+   ========================================================= */
+
+.appToolbar .sapMSF {
+    border-radius: 0.35rem;
+}
+
+.appToolbar .sapMBtn {
+    margin-left: 0.15rem;
+}
+
+.appToolbar .sapFAvatar {
+    margin-left: 0.35rem;
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   PROFILE POPOVER
+   ========================================================= */
+
+.toolbarProfileHeader {
+    padding: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+    background: #f8fafc;
+}
+
+.toolbarProfileName {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.toolbarProfileRole {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin-top: 0.2rem;
+}
+
+.sapMPopover .sapMList {
+    border-radius: 0.5rem;
+}
+
+
+/* =========================================================
+   KPI / CONTENT CARDS
+   ========================================================= */
+
+.metricCard,
+.contentCard {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.metricCard {
+    min-height: 8.5rem;
+    width: 100%;
+}
+
+.cardLabel {
+    font-size: 0.8rem;
+    color: #64748b;
+    line-height: 1.2rem;
+}
+
+.smallText,
+.mutedText {
+    color: #64748b;
+}
+
+
+/* =========================================================
+   KPI GRID
+   ========================================================= */
+
+.kpiGrid {
+    width: 100%;
+    margin-top: 0.25rem;
+}
+
+.kpiGrid .metricCard {
+    width: 100%;
+}
+
+.metricCard .sapMObjectNumber {
+    margin-top: 0.2rem;
+    margin-bottom: 0.15rem;
+}
+
+.metricCard .sapMObjectNumberText {
+    font-size: 1.35rem;
+    font-weight: 700;
+}
+
+.metricCard .sapMObjectNumberUnit {
+    font-size: 0.8rem;
+}
+
+.metricCard .sapMObjStatus {
+    font-size: 0.78rem;
+    margin-top: 0.1rem;
+}
+
+
+/* =========================================================
+   FILTER PANEL
+   ========================================================= */
+
+.filterPanel {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    margin-top: 0 !important;
+}
+
+.filterField {
+    margin: 0.4rem 0.75rem 0.4rem 0;
+    min-width: 12rem;
+}
+
+.formLabel {
+    margin-top: 0.75rem;
+}
+
+.totalsBox {
+    padding: 1rem;
+}
+
+.detailHeader {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    margin-top: 0.75rem;
+}
+
+
+/* =========================================================
+   REPORTS PAGE HEADER
+   ========================================================= */
+
+.reportPageHeader {
+    margin: 0 !important;
+    padding: 0 0.25rem !important;
+    min-height: 3.25rem !important;
+    height: 3.25rem !important;
+    box-sizing: border-box;
+}
+
+.reportHeaderContent {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.reportHeaderContent .sapMTitle {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.reportHeaderContent .sapMText {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+
+/* =========================================================
+   REPORT FILTER HEADER
+   ========================================================= */
+
+.filterHeaderToolbar {
+    background: #ffffff !important;
+    border-bottom: 1px solid #e5e7eb !important;
+    padding: 0 0.75rem !important;
+}
+
+.filterHeaderToolbar .sapMTitle {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.filterHeaderToolbar .sapMBtn {
+    margin-left: 0.25rem;
+}
+
+.filterPanel.sapMPanel {
+    margin-top: 0 !important;
+}
+
+.filterPanel .sapMPanelContent {
+    padding-top: 0.75rem !important;
+}
+
+
+/* =========================================================
+   PURCHASE ORDER STATUS
+   ========================================================= */
+
+.statusChart {
+    min-height: 8rem;
+}
+
+.statusGrid {
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.statusMiniCard {
+    min-height: 6.5rem;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.6rem;
+    padding: 0.6rem;
+    box-sizing: border-box;
+    transition:
+        box-shadow 0.15s ease,
+        transform 0.15s ease;
+}
+
+.statusMiniCard:hover {
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+}
+
+.statusMiniCard .sapMObjectNumber {
+    margin-bottom: 0.25rem;
+}
+
+.statusMiniCard .sapMObjectNumberText {
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+.statusMiniCard .sapMObjectNumberUnit {
+    font-size: 0.75rem;
+}
+
+.statusMiniCard .sapMObjStatus {
+    font-size: 0.8rem;
+}
+
+.statusMiniCard .sapMObjStatusIcon {
+    font-size: 0.75rem;
+}
+
+
+/* =========================================================
+   CHART
+   ========================================================= */
+
+#monthlySpendChart {
+    margin-top: 0.25rem;
+}
+
+.monthBars .sapMPI {
+    width: 3rem;
+    transform: rotate(-90deg);
+    margin: 1.2rem 0;
+}
+
+
+/* =========================================================
+   REPORT SUMMARY
+   ========================================================= */
+
+.reportSummaryRow {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.reportSummaryRow:last-child {
+    border-bottom: none;
+}
+
+
+/* =========================================================
+   REPORT TABLE
+   ========================================================= */
+
+#reportsTable {
+    width: 100%;
+}
+
+#reportsTable .sapMListTblHeaderCell {
+    background: #f8fafc;
+}
+
+#reportsTable .sapMListTblHeaderCell .sapMText {
+    font-weight: 600;
+}
+
+#reportsTable .sapMLIB {
+    transition: background 0.15s ease;
+}
+
+#reportsTable .sapMLIB:hover {
+    background: #f8fafc;
+}
+
+
+/* =========================================================
+   RESPONSIVE REPORT LAYOUT
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+    .filterField {
+        min-width: 11rem;
+    }
+
+    .kpiGrid {
+        width: 100%;
+    }
+
+    .metricCard {
+        min-height: 8rem;
+    }
+}
+
+
+/* =========================================================
+   TABLET / SMALL SCREEN
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .reportPageHeader {
+        min-height: auto !important;
+        height: auto !important;
+        padding: 0.25rem 0 !important;
+    }
+
+    .reportHeaderContent {
+        max-width: 75%;
+    }
+
+    .filterField {
+        min-width: 10rem;
+    }
+
+    .metricCard {
+        min-height: 8rem;
+    }
+
+    .appToolbar .sapMSF {
+        width: 14rem !important;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .reportPageHeader {
+        min-height: auto !important;
+        height: auto !important;
+        padding: 0.35rem 0 !important;
+    }
+
+    .reportHeaderContent {
+        max-width: 65%;
+    }
+
+    .reportHeaderContent .sapMTitle {
+        font-size: 1.1rem;
+    }
+
+    .reportHeaderContent .sapMText {
+        font-size: 0.75rem;
+    }
+
+    .filterField {
+        width: 100% !important;
+        min-width: 100% !important;
+        margin-right: 0;
+    }
+
+    .metricCard {
+        width: 100% !important;
+        min-height: 7.5rem;
+        margin-right: 0 !important;
+        margin-bottom: 0.75rem;
+    }
+
+    .contentCard {
+        width: 100% !important;
+        margin-right: 0 !important;
+        margin-bottom: 0.75rem;
+    }
+
+    .filterHeaderToolbar {
+        padding: 0 0.5rem !important;
+    }
+
+    .appToolbar .sapMSF {
+        width: 10rem !important;
+    }
+
+    .toolbarSection {
+        display: none;
+    }
+}

@@ -1,0 +1,257 @@
+<mvc:View
+    controllerName="purchaseorderprocessing.controller.GoodsReceipt"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+
+    <Page
+        showHeader="false"
+        class="pageBackground">
+
+        <content>
+
+            <VBox class="sapUiSmallMargin">
+
+                <!-- Application Toolbar -->
+                <Toolbar class="appToolbar">
+
+                    <Button
+                        icon="sap-icon://nav-back"
+                        type="Transparent"
+                        press=".onBack" />
+
+                    <Title
+                        text="Goods Receipt" />
+
+                    <ToolbarSpacer />
+
+                    <Avatar
+                        initials="SP"
+                        displaySize="XS" />
+
+                </Toolbar>
+
+
+                <!-- Header -->
+                <VBox
+                    class="contentCard sapUiSmallMarginTop">
+
+                    <HBox
+                        alignItems="Center">
+
+                        <VBox>
+
+                            <Title
+                                text="Goods Receipt"
+                                level="H1" />
+
+                            <Text
+                                text="{= 'Purchase Order ' + ${receipt>/poNumber} }"
+                                class="mutedText" />
+
+                        </VBox>
+
+                        <ToolbarSpacer />
+
+                        <ObjectStatus
+                            text="Ready for Receipt"
+                            state="Information" />
+
+                    </HBox>
+
+                </VBox>
+
+
+                <!-- Receipt Information -->
+                <HBox
+                    wrap="Wrap"
+                    class="sapUiSmallMarginTop">
+
+                    <VBox
+                        width="49%"
+                        class="contentCard sapUiTinyMarginEnd">
+
+                        <Title
+                            text="Receipt Information"
+                            level="H3" />
+
+                        <Label
+                            text="Posting Date"
+                            class="sapUiTinyMarginTop" />
+
+                        <DatePicker
+                            value="{receipt>/postingDate}"
+                            valueFormat="yyyy-MM-dd"
+                            displayFormat="dd-MM-yyyy"
+                            width="100%" />
+
+                        <Label
+                            text="Delivery Note"
+                            class="sapUiSmallMarginTop" />
+
+                        <Input
+                            value="{receipt>/deliveryNote}"
+                            placeholder="Enter supplier delivery note" />
+
+                    </VBox>
+
+
+                    <!-- Summary -->
+                    <VBox
+                        width="49%"
+                        class="contentCard">
+
+                        <Title
+                            text="Receipt Summary"
+                            level="H3" />
+
+                        <ObjectAttribute
+                            title="Ordered Quantity"
+                            text="{receipt>/totalOrdered}" />
+
+                        <ObjectAttribute
+                            title="Previously Received"
+                            text="{receipt>/totalReceived}" />
+
+                        <ObjectAttribute
+                            title="Remaining Quantity"
+                            text="{receipt>/totalRemaining}" />
+
+                    </VBox>
+
+                </HBox>
+
+
+                <!-- Items -->
+                <VBox
+                    class="contentCard sapUiSmallMarginTop">
+
+                    <Title
+                        text="Items"
+                        level="H3" />
+
+                    <MessageStrip
+                        text="Enter the quantity received for each item. You cannot receive more than the remaining quantity."
+                        type="Information"
+                        showIcon="true"
+                        class="sapUiSmallMarginBottom" />
+
+                    <Table
+                        items="{receipt>/items}"
+                        growing="true"
+                        growingThreshold="20">
+
+                        <columns>
+
+                            <Column>
+                                <Text text="Item" />
+                            </Column>
+
+                            <Column>
+                                <Text text="Material" />
+                            </Column>
+
+                            <Column>
+                                <Text text="Description" />
+                            </Column>
+
+                            <Column>
+                                <Text text="Ordered" />
+                            </Column>
+
+                            <Column>
+                                <Text text="Received" />
+                            </Column>
+
+                            <Column>
+                                <Text text="Remaining" />
+                            </Column>
+
+                            <Column>
+                                <Text text="Receive Now" />
+                            </Column>
+
+                            <Column>
+                                <Text text="Status" />
+                            </Column>
+
+                        </columns>
+
+
+                        <items>
+
+                            <ColumnListItem>
+
+                                <cells>
+
+                                    <Text
+                                        text="{receipt>itemId}" />
+
+                                    <Text
+                                        text="{receipt>material}" />
+
+                                    <Text
+                                        text="{receipt>description}" />
+
+                                    <ObjectNumber
+                                        number="{receipt>quantity}"
+                                        unit="{receipt>unit}" />
+
+                                    <ObjectNumber
+                                        number="{receipt>receivedQuantity}"
+                                        unit="{receipt>unit}" />
+
+                                    <ObjectNumber
+                                        number="{receipt>remainingQuantity}"
+                                        unit="{receipt>unit}" />
+
+                                    <Input
+                                        value="{receipt>receiptQuantity}"
+                                        type="Number"
+                                        width="8rem"
+                                        textAlign="End"
+                                        liveChange=".onQuantityChange"
+                                        enabled="{= ${receipt>remainingQuantity} > 0 }" />
+
+                                    <ObjectStatus
+                                        text="{receipt>itemStatus}"
+                                        state="{= ${receipt>itemStatus} === 'Open' ? 'Information' : ${receipt>itemStatus} === 'Partially Received' ? 'Warning' : 'Success' }" />
+
+                                </cells>
+
+                            </ColumnListItem>
+
+                        </items>
+
+                    </Table>
+
+                </VBox>
+
+
+                <!-- Footer Actions -->
+                <Toolbar
+                    class="sapUiSmallMarginTop">
+
+                    <ToolbarSpacer />
+
+                    <Button
+                        text="Cancel"
+                        type="Transparent"
+                        press=".onBack" />
+
+                    <Button
+                        text="Post Goods Receipt"
+                        icon="sap-icon://complete"
+                        type="Accept"
+                        press=".onPostGoodsReceipt"
+                        busy="{receipt>/posting}"
+                        enabled="{= !${receipt>/posting} &amp;&amp; ${receipt>/totalRemaining} > 0 }" />
+
+                </Toolbar>
+
+            </VBox>
+
+        </content>
+
+    </Page>
+
+</mvc:View>

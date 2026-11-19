@@ -1,0 +1,33 @@
+{
+  "name": "purchase-order-processing",
+  "version": "3.0.0",
+  "private": true,
+  "description": "SAP CAP + SAPUI5 Purchase Order Processing",
+  "dependencies": {
+    "@sap/cds": "9.9.3",
+    "@cap-js/sqlite": "2.1.1",
+    "express": "^4.21.2",
+    "@sap/xssec": "^4"
+  },
+  "devDependencies": {
+    "@sap/cds-dk": "9.9.3"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "watch": "cds watch",
+    "deploy": "cds deploy --to sqlite:db.sqlite"
+  },
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "sqlite",
+        "credentials": {
+          "database": "db.sqlite"
+        }
+      },
+      "[production]": {
+        "auth": "xsuaa"
+      }
+    }
+  }
+}

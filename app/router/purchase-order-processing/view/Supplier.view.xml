@@ -1,0 +1,186 @@
+<mvc:View
+    controllerName="purchaseorderprocessing.controller.Supplier"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+
+    <Page
+        showHeader="false"
+        class="pageBackground">
+
+        <content>
+            <VBox class="sapUiSmallMargin">
+
+                <!-- Top Toolbar -->
+                <Toolbar class="appToolbar">
+
+                    <Button
+                        icon="sap-icon://nav-back"
+                        type="Transparent"
+                        press=".onBack"/>
+
+                    <Title text="Suppliers"/>
+
+                    <ToolbarSpacer/>
+
+                    <Button
+                        text="Create Supplier"
+                        icon="sap-icon://add"
+                        type="Emphasized"
+                        press=".onCreate"/>
+
+                    <Avatar
+                        initials="SP"
+                        displaySize="XS"/>
+
+                </Toolbar>
+
+                <!-- Filters -->
+                <Panel class="filterPanel">
+
+                    <content>
+                        <HBox
+                            alignItems="End"
+                            wrap="Wrap">
+
+                            <VBox class="filterField">
+                                <Label text="Search by name or ID"/>
+
+                                <Input
+                                    value="{filters>/search}"
+                                    width="18rem"/>
+                            </VBox>
+
+                            <VBox class="filterField">
+                                <Label text="Status"/>
+
+                                <ComboBox
+                                    selectedKey="{filters>/status}">
+
+                                    <core:Item
+                                        key=""
+                                        text="All"/>
+
+                                    <core:Item
+                                        key="Active"
+                                        text="Active"/>
+
+                                    <core:Item
+                                        key="Blocked"
+                                        text="Blocked"/>
+
+                                </ComboBox>
+                            </VBox>
+
+                            <VBox class="filterField">
+                                <Label text="City"/>
+
+                                <Input
+                                    value="{filters>/city}"/>
+                            </VBox>
+
+                            <Button
+                                text="Go"
+                                type="Emphasized"
+                                press=".onSearch"/>
+
+                            <Button
+                                text="Clear"
+                                type="Transparent"
+                                press=".onClear"/>
+
+                        </HBox>
+                    </content>
+
+                </Panel>
+
+                <!-- Supplier Table -->
+                <VBox
+                    class="contentCard sapUiSmallMarginTop">
+
+                    <Toolbar>
+
+                        <Title text="Supplier Master"/>
+
+                        <ToolbarSpacer/>
+
+                        <Text text="{supplier>/countText}"/>
+
+                    </Toolbar>
+
+                    <Table
+                        id="supplierTable"
+                        items="{supplier>/items}"
+                        growing="true">
+
+                        <columns>
+
+                            <Column>
+                                <Text text="Supplier ID"/>
+                            </Column>
+
+                            <Column>
+                                <Text text="Supplier Name"/>
+                            </Column>
+
+                            <Column>
+                                <Text text="City"/>
+                            </Column>
+
+                            <Column>
+                                <Text text="Contact"/>
+                            </Column>
+
+                            <Column>
+                                <Text text="Email"/>
+                            </Column>
+
+                            <Column>
+                                <Text text="Status"/>
+                            </Column>
+
+                        </columns>
+
+                        <items>
+
+                            <ColumnListItem
+                                type="Navigation"
+                                press=".onSupplierPress">
+
+                                <cells>
+
+                                    <Link
+                                        text="{supplier>ID}"/>
+
+                                    <Text
+                                        text="{supplier>name}"/>
+
+                                    <Text
+                                        text="{supplier>city}"/>
+
+                                    <Text
+                                        text="{supplier>contact}"/>
+
+                                    <Text
+                                        text="{supplier>email}"/>
+
+                                    <ObjectStatus
+                                        text="{supplier>status}"
+                                        state="{path:'supplier>status', formatter:'.statusState'}"/>
+
+                                </cells>
+
+                            </ColumnListItem>
+
+                        </items>
+
+                    </Table>
+
+                </VBox>
+
+            </VBox>
+        </content>
+
+    </Page>
+
+</mvc:View>

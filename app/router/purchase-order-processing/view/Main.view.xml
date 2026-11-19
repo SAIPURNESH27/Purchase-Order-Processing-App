@@ -1,0 +1,795 @@
+<mvc:View
+  controllerName="purchaseorderprocessing.controller.Main"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m"
+  xmlns:f="sap.f"
+  xmlns:viz="sap.viz.ui5.controls"
+  xmlns:vizData="sap.viz.ui5.data"
+  xmlns:vizFeeds="sap.viz.ui5.controls.common.feeds">
+
+  <Page
+    showHeader="false"
+    class="pageBackground">
+
+    <content>
+
+      <VBox class="sapUiSmallMargin">
+
+        <!-- =====================================================
+             TOP TOOLBAR
+             ===================================================== -->
+
+        <Toolbar class="appToolbar">
+
+          <Title
+            text="SAP"
+            class="sapUiTinyMarginEnd sapTitle"/>
+
+          <Text
+            text="Procurement"
+            class="toolbarSection"/>
+
+          <ToolbarSpacer/>
+
+          <!-- Search -->
+
+          <SearchField
+            width="18rem"
+            placeholder="Search apps or purchase orders"
+            tooltip="Search applications or purchase orders"
+            search=".onGlobalSearch"/>
+
+          <!-- Refresh -->
+
+          <Button
+            icon="sap-icon://refresh"
+            type="Transparent"
+            tooltip="Refresh procurement data"
+            press=".onRefresh"/>
+
+          <!-- Notifications -->
+
+          <Button
+            id="notificationButton"
+            icon="sap-icon://bell"
+            type="Transparent"
+            tooltip="Notifications"
+            press=".onNotifications"/>
+
+          <!-- User -->
+
+          <Avatar
+            id="profileAvatar"
+            initials="SP"
+            displaySize="XS"
+            tooltip="User profile"
+            press=".onProfile"/>
+
+        </Toolbar>
+
+
+        <!-- =====================================================
+             MAIN CONTENT
+             ===================================================== -->
+
+        <HBox
+          class="contentArea"
+          alignItems="Start">
+
+          <!-- ===================================================
+               SIDE NAVIGATION
+               =================================================== -->
+
+          <VBox
+            width="13rem"
+            class="sideNavCard sapUiTinyMarginEnd">
+
+            <Button
+              text="Home"
+              icon="sap-icon://home"
+              type="Transparent"
+              press=".onHome"/>
+
+            <Button
+              text="Purchase Orders"
+              icon="sap-icon://document-text"
+              type="Transparent"
+              press=".onPurchaseOrders"/>
+
+            <Button
+              text="Suppliers"
+              icon="sap-icon://employee"
+              type="Transparent"
+              press=".onSuppliers"/>
+
+            <Button
+              text="Approvals"
+              icon="sap-icon://approvals"
+              type="Transparent"
+              press=".onApprovals"/>
+
+            <Button
+              text="Reports"
+              icon="sap-icon://business-objects-experience"
+              type="Transparent"
+              press=".onReports"/>
+
+          </VBox>
+
+
+          <!-- ===================================================
+               DASHBOARD
+               =================================================== -->
+
+          <VBox width="100%">
+
+            <Title
+              text="Procurement Overview"
+              level="H1"/>
+
+            <Text
+              text="Monitor purchase orders, supplier activity and approvals"
+              class="mutedText sapUiTinyMarginBottom"/>
+
+
+            <!-- =================================================
+                 10 KPI CARDS
+                 ================================================= -->
+
+            <f:GridContainer
+              class="kpiGrid"
+              snapToRow="true">
+
+              <f:layout>
+
+                <f:GridContainerSettings
+                  columnSize="14rem"
+                  rowSize="8.5rem"
+                  gap="0.75rem"/>
+
+              </f:layout>
+
+              <f:items>
+
+                <!-- KPI 1 -->
+
+                <VBox
+                  class="metricCard"
+                  justifyContent="Center">
+
+                  <Text
+                    text="Total Purchase Orders"
+                    class="cardLabel"/>
+
+                  <ObjectNumber
+                    number="{dashboard>/total}"
+                    emphasized="true"/>
+
+                  <ObjectStatus
+                    text="All orders"
+                    state="Information"/>
+
+                  <Text
+                    text="current portfolio"
+                    class="smallText"/>
+
+                </VBox>
+
+
+                <!-- KPI 2 -->
+
+                <VBox
+                  class="metricCard"
+                  justifyContent="Center">
+
+                  <Text
+                    text="Total Spend"
+                    class="cardLabel"/>
+
+                  <ObjectNumber
+                    number="{
+                      path: 'dashboard>/spend',
+                      formatter: '.formatCompactCurrency'
+                    }"
+                    emphasized="true"/>
+
+                  <ObjectStatus
+                    text="Calculated"
+                    state="Information"/>
+
+                  <Text
+                    text="from PO items"
+                    class="smallText"/>
+
+                </VBox>
+
+
+                <!-- KPI 3 -->
+
+                <VBox
+                  class="metricCard"
+                  justifyContent="Center">
+
+                  <Text
+                    text="Average PO Value"
+                    class="cardLabel"/>
+
+                  <ObjectNumber
+                    number="{
+                      path: 'dashboard>/averagePOValue',
+                      formatter: '.formatCompactCurrency'
+                    }"
+                    emphasized="true"/>
+
+                  <ObjectStatus
+                    text="Per purchase order"
+                    state="Information"/>
+
+                  <Text
+                    text="average order value"
+                    class="smallText"/>
+
+                </VBox>
+
+
+                <!-- KPI 4 -->
+
+                <VBox
+                  class="metricCard"
+                  justifyContent="Center">
+
+                  <Text
+                    text="Spend This Month"
+                    class="cardLabel"/>
+
+                  <ObjectNumber
+                    number="{
+                      path: 'dashboard>/spendThisMonth',
+                      formatter: '.formatCompactCurrency'
+                    }"
+                    emphasized="true"/>
+
+                  <ObjectStatus
+                    text="Current month"
+                    state="Information"/>
+
+                  <Text
+                    text="monthly procurement"
+                    class="smallText"/>
+
+                </VBox>
+
+
+                <!-- KPI 5 -->
+
+                <VBox
+                  class="metricCard"
+                  justifyContent="Center">
+
+                  <Text
+                    text="Total PO Items"
+                    class="cardLabel"/>
+
+                  <ObjectNumber
+                    number="{dashboard>/totalPOItems}"
+                    emphasized="true"/>
+
+                  <ObjectStatus
+                    text="Line items"
+                    state="Information"/>
+
+                  <Text
+                    text="across all orders"
+                    class="smallText"/>
+
+                </VBox>
+
+
+                <!-- KPI 6 -->
+
+                <VBox
+                  class="metricCard"
+                  justifyContent="Center">
+
+                  <Text
+                    text="Pending Approval"
+                    class="cardLabel"/>
+
+                  <ObjectNumber
+                    number="{dashboard>/pending}"
+                    emphasized="true"/>
+
+                  <ObjectStatus
+                    text="Requires action"
+                    state="Warning"/>
+
+                  <Text
+                    text="approval queue"
+                    class="smallText"/>
+
+                </VBox>
+
+
+                <!-- KPI 7 -->
+
+                <VBox
+                  class="metricCard"
+                  justifyContent="Center">
+
+                  <Text
+                    text="Pending Approval Value"
+                    class="cardLabel"/>
+
+                  <ObjectNumber
+                    number="{
+                      path: 'dashboard>/pendingApprovalValue',
+                      formatter: '.formatCompactCurrency'
+                    }"
+                    emphasized="true"
+                    state="Warning"/>
+
+                  <ObjectStatus
+                    text="Awaiting approval"
+                    state="Warning"/>
+
+                  <Text
+                    text="value requiring action"
+                    class="smallText"/>
+
+                </VBox>
+
+
+                <!-- KPI 8 -->
+
+                <VBox
+                  class="metricCard"
+                  justifyContent="Center">
+
+                  <Text
+                    text="Active Suppliers"
+                    class="cardLabel"/>
+
+                  <ObjectNumber
+                    number="{dashboard>/activeSuppliers}"
+                    emphasized="true"/>
+
+                  <ObjectStatus
+                    text="Currently engaged"
+                    state="Success"/>
+
+                  <Text
+                    text="suppliers with POs"
+                    class="smallText"/>
+
+                </VBox>
+
+
+                <!-- KPI 9 -->
+
+                <VBox
+                  class="metricCard"
+                  justifyContent="Center">
+
+                  <Text
+                    text="Highest PO Value"
+                    class="cardLabel"/>
+
+                  <ObjectNumber
+                    number="{
+                      path: 'dashboard>/highestPOValue',
+                      formatter: '.formatCompactCurrency'
+                    }"
+                    emphasized="true"/>
+
+                  <ObjectStatus
+                    text="Largest order"
+                    state="Information"/>
+
+                  <Text
+                    text="highest purchase order"
+                    class="smallText"/>
+
+                </VBox>
+
+
+                <!-- KPI 10 -->
+
+                <VBox
+                  class="metricCard"
+                  justifyContent="Center">
+
+                  <Text
+                    text="Average Spend per Supplier"
+                    class="cardLabel"/>
+
+                  <ObjectNumber
+                    number="{
+                      path: 'dashboard>/averageSpendPerSupplier',
+                      formatter: '.formatCompactCurrency'
+                    }"
+                    emphasized="true"/>
+
+                  <ObjectStatus
+                    text="Supplier average"
+                    state="Information"/>
+
+                  <Text
+                    text="spend across active suppliers"
+                    class="smallText"/>
+
+                </VBox>
+
+              </f:items>
+
+            </f:GridContainer>
+
+
+            <!-- =================================================
+                 STATUS + MONTHLY SPEND
+                 ================================================= -->
+
+            <HBox
+              class="sapUiSmallMarginTop"
+              wrap="Wrap">
+
+              <!-- PURCHASE ORDER STATUS -->
+
+              <VBox
+                width="49%"
+                class="contentCard sapUiTinyMarginEnd">
+
+                <Toolbar>
+
+                  <Title
+                    text="Purchase Order Status"
+                    level="H3"/>
+
+                  <ToolbarSpacer/>
+
+                  <ObjectStatus
+                    text="{= ${dashboard>/total} + ' Total'}"
+                    state="Information"/>
+
+                </Toolbar>
+
+                <Text
+                  text="Current status of all purchase orders"
+                  class="mutedText sapUiTinyMarginBottom"/>
+
+
+                <f:GridContainer
+                  class="statusGrid"
+                  snapToRow="false">
+
+                  <f:layout>
+
+                    <f:GridContainerSettings
+                      columnSize="7.5rem"
+                      rowSize="6.5rem"
+                      gap="0.65rem"/>
+
+                  </f:layout>
+
+                  <f:items>
+
+                    <!-- Total -->
+
+                    <VBox
+                      class="statusMiniCard"
+                      alignItems="Center"
+                      justifyContent="Center">
+
+                      <ObjectNumber
+                        number="{dashboard>/total}"
+                        emphasized="true"/>
+
+                      <ObjectStatus
+                        text="Total"
+                        state="Information"
+                        icon="sap-icon://documents"/>
+
+                    </VBox>
+
+
+                    <!-- Released -->
+
+                    <VBox
+                      class="statusMiniCard"
+                      alignItems="Center"
+                      justifyContent="Center">
+
+                      <ObjectNumber
+                        number="{dashboard>/released}"
+                        emphasized="true"
+                        state="Success"/>
+
+                      <ObjectStatus
+                        text="Released"
+                        state="Success"
+                        icon="sap-icon://accept"/>
+
+                    </VBox>
+
+
+                    <!-- Pending -->
+
+                    <VBox
+                      class="statusMiniCard"
+                      alignItems="Center"
+                      justifyContent="Center">
+
+                      <ObjectNumber
+                        number="{dashboard>/pending}"
+                        emphasized="true"
+                        state="Warning"/>
+
+                      <ObjectStatus
+                        text="Pending"
+                        state="Warning"
+                        icon="sap-icon://pending"/>
+
+                    </VBox>
+
+
+                    <!-- Blocked -->
+
+                    <VBox
+                      class="statusMiniCard"
+                      alignItems="Center"
+                      justifyContent="Center">
+
+                      <ObjectNumber
+                        number="{dashboard>/blocked}"
+                        emphasized="true"
+                        state="Error"/>
+
+                      <ObjectStatus
+                        text="Blocked"
+                        state="Error"
+                        icon="sap-icon://locked"/>
+
+                    </VBox>
+
+
+                    <!-- Rejected -->
+
+                    <VBox
+                      class="statusMiniCard"
+                      alignItems="Center"
+                      justifyContent="Center">
+
+                      <ObjectNumber
+                        number="{dashboard>/rejected}"
+                        emphasized="true"
+                        state="Error"/>
+
+                      <ObjectStatus
+                        text="Rejected"
+                        state="Error"
+                        icon="sap-icon://decline"/>
+
+                    </VBox>
+
+
+                    <!-- Cancelled -->
+
+                    <VBox
+                      class="statusMiniCard"
+                      alignItems="Center"
+                      justifyContent="Center">
+
+                      <ObjectNumber
+                        number="{dashboard>/cancelled}"
+                        emphasized="true"/>
+
+                      <ObjectStatus
+                        text="Cancelled"
+                        state="None"
+                        icon="sap-icon://cancel"/>
+
+                    </VBox>
+
+                  </f:items>
+
+                </f:GridContainer>
+
+              </VBox>
+
+
+              <!-- MONTHLY PURCHASE SPEND -->
+
+              <VBox
+                width="49%"
+                class="contentCard">
+
+                <Toolbar>
+
+                  <Title
+                    text="Monthly Purchase Spend"
+                    level="H3"/>
+
+                  <ToolbarSpacer/>
+
+                  <ObjectStatus
+                    text="2026"
+                    state="Information"/>
+
+                </Toolbar>
+
+
+                <viz:VizFrame
+                  id="monthlySpendChart"
+                  vizType="column"
+                  width="100%"
+                  height="270px"
+                  uiConfig="{applicationSet:'fiori'}"
+                  vizProperties="{
+                    'title': {
+                      'visible': false
+                    },
+                    'plotArea': {
+                      'dataLabel': {
+                        'visible': true,
+                        'showTotal': false
+                      }
+                    }
+                  }">
+
+                  <viz:dataset>
+
+                    <vizData:FlattenedDataset
+                      data="{dashboard>/monthData}">
+
+                      <vizData:dimensions>
+
+                        <vizData:DimensionDefinition
+                          name="Month"
+                          value="{dashboard>month}"/>
+
+                      </vizData:dimensions>
+
+                      <vizData:measures>
+
+                        <vizData:MeasureDefinition
+                          name="Purchase Spend"
+                          value="{dashboard>spend}"/>
+
+                      </vizData:measures>
+
+                    </vizData:FlattenedDataset>
+
+                  </viz:dataset>
+
+                  <viz:feeds>
+
+                    <vizFeeds:FeedItem
+                      uid="valueAxis"
+                      type="Measure"
+                      values="Purchase Spend"/>
+
+                    <vizFeeds:FeedItem
+                      uid="categoryAxis"
+                      type="Dimension"
+                      values="Month"/>
+
+                  </viz:feeds>
+
+                </viz:VizFrame>
+
+                <Text
+                  text="{dashboard>/monthSummary}"
+                  class="mutedText"/>
+
+              </VBox>
+
+            </HBox>
+
+
+            <!-- =================================================
+                 RECENT PURCHASE ORDERS
+                 ================================================= -->
+
+            <VBox
+              class="contentCard sapUiSmallMarginTop">
+
+              <Toolbar>
+
+                <Title
+                  text="Recent Purchase Orders"
+                  level="H3"/>
+
+                <ToolbarSpacer/>
+
+                <Button
+                  text="Create Purchase Order"
+                  icon="sap-icon://add"
+                  type="Emphasized"
+                  press=".onCreate"/>
+
+                <Button
+                  text="View All"
+                  type="Transparent"
+                  press=".onPurchaseOrders"/>
+
+              </Toolbar>
+
+
+              <Table
+                items="{dashboard>/recent}"
+                growing="true">
+
+                <columns>
+
+                  <Column>
+                    <Text text="PO Number"/>
+                  </Column>
+
+                  <Column>
+                    <Text text="Supplier"/>
+                  </Column>
+
+                  <Column>
+                    <Text text="Order Date"/>
+                  </Column>
+
+                  <Column>
+                    <Text text="Net Value"/>
+                  </Column>
+
+                  <Column>
+                    <Text text="Status"/>
+                  </Column>
+
+                </columns>
+
+                <items>
+
+                  <ColumnListItem
+                    type="Navigation"
+                    press=".onRecentPress">
+
+                    <cells>
+
+                      <Link
+                        text="{dashboard>poNumber}"/>
+
+                      <Text
+                        text="{dashboard>supplier}"/>
+
+                      <Text
+                        text="{dashboard>documentDate}"/>
+
+                      <ObjectNumber
+                        number="{
+                          path: 'dashboard>netValue',
+                          formatter: '.formatCompactCurrency'
+                        }"/>
+
+                      <ObjectStatus
+                        text="{dashboard>status}"
+                        state="{
+                          path: 'dashboard>status',
+                          formatter: '.statusState'
+                        }"/>
+
+                    </cells>
+
+                  </ColumnListItem>
+
+                </items>
+
+              </Table>
+
+            </VBox>
+
+          </VBox>
+
+        </HBox>
+
+      </VBox>
+
+    </content>
+
+  </Page>
+
+</mvc:View>

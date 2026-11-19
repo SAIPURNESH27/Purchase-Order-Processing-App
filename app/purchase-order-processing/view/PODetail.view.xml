@@ -1,0 +1,1062 @@
+<mvc:View
+    controllerName="purchaseorderprocessing.controller.PODetail"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+
+    <Page
+        showHeader="false"
+        class="pageBackground">
+
+        <content>
+
+            <VBox>
+
+                <!-- ===================================================== -->
+                <!-- APPLICATION TOOLBAR -->
+                <!-- ===================================================== -->
+
+                <Toolbar class="appToolbar">
+
+                    <Button
+                        icon="sap-icon://nav-back"
+                        type="Transparent"
+                        press=".onBack" />
+
+                    <Title
+                        text="Purchase Orders"
+                        level="H2" />
+
+                    <ToolbarSpacer />
+
+                    <Avatar
+                        initials="SP"
+                        displaySize="XS" />
+
+                </Toolbar>
+
+
+                <!-- ===================================================== -->
+                <!-- PO HEADER -->
+                <!-- ===================================================== -->
+
+                <VBox
+                    class="detailHeader sapUiSmallMargin">
+
+                    <HBox
+                        alignItems="Center"
+                        justifyContent="SpaceBetween"
+                        wrap="Wrap">
+
+                        <!-- LEFT SIDE -->
+                        <VBox>
+
+                            <Title
+                                text="Purchase Order {detail>/poNumber}"
+                                level="H1" />
+
+                            <HBox
+                                alignItems="Center"
+                                class="sapUiTinyMarginTop">
+
+                                <Text
+                                    text="Supplier:"
+                                    class="mutedText sapUiTinyMarginEnd" />
+
+                                <ObjectIdentifier
+                                    title="{detail>/supplierName}"
+                                    text="{detail>/supplierId}" />
+
+                            </HBox>
+
+                            <Text
+                                text="{= 'Created on ' + ${detail>/documentDate} + ' | Created by ' + ${detail>/createdBy} }"
+                                class="mutedText sapUiTinyMarginTop" />
+
+                        </VBox>
+
+
+                        <!-- RIGHT SIDE -->
+                        <HBox
+                            alignItems="Center"
+                            wrap="Wrap"
+                            class="sapUiSmallMarginTop sapUiSmallMarginBegin">
+
+                            <ObjectStatus
+                                text="{detail>/status}"
+                                state="{path:'detail>/status',formatter:'.statusState'}"
+                                class="sapUiSmallMarginEnd" />
+
+                            <!-- Edit -->
+                            <Button
+                                text="Edit"
+                                icon="sap-icon://edit"
+                                type="Transparent"
+                                press=".onEdit"
+                                visible="{= ${detail>/status} === 'Draft' }"
+                                class="sapUiTinyMarginEnd" />
+
+                            <!-- Copy -->
+                            <Button
+                                text="Copy"
+                                icon="sap-icon://copy"
+                                type="Transparent"
+                                press=".onCopy"
+                                class="sapUiTinyMarginEnd" />
+
+                            <!-- Print -->
+                            <Button
+                                text="Print"
+                                icon="sap-icon://print"
+                                type="Transparent"
+                                press=".onPrint"
+                                class="sapUiTinyMarginEnd" />
+
+                            <!-- Approve -->
+                            <Button
+                                text="Approve"
+                                icon="sap-icon://accept"
+                                type="Accept"
+                                press=".onApprove"
+                                visible="{= ${detail>/status} === 'Pending Approval' }"
+                                class="sapUiTinyMarginEnd" />
+
+                            <!-- Reject -->
+                            <Button
+                                text="Reject"
+                                icon="sap-icon://decline"
+                                type="Reject"
+                                press=".onReject"
+                                visible="{= ${detail>/status} === 'Pending Approval' }"
+                                class="sapUiTinyMarginEnd" />
+
+                            <!-- Release -->
+                            <Button
+                                text="Release"
+                                icon="sap-icon://complete"
+                                type="Accept"
+                                press=".onRelease"
+                                visible="{= ${detail>/status} === 'Approved' }"
+                                class="sapUiTinyMarginEnd" />
+
+                            <!-- Goods Receipt -->
+                            <Button
+                                text="Goods Receipt"
+                                icon="sap-icon://shipping-status"
+                                type="Emphasized"
+                                press=".onGoodsReceipt"
+                                visible="{= ${detail>/status} === 'Released' || ${detail>/status} === 'Partially Received' }"
+                                class="sapUiTinyMarginEnd" />
+
+                            <!-- Cancel -->
+                            <Button
+                                text="Cancel"
+                                icon="sap-icon://sys-cancel"
+                                type="Transparent"
+                                press=".onCancelPO"
+                                visible="{= ${detail>/status} !== 'Cancelled' &amp;&amp; ${detail>/status} !== 'Rejected' &amp;&amp; ${detail>/status} !== 'Closed' }" />
+
+                        </HBox>
+
+                    </HBox>
+
+                </VBox>
+
+
+                <!-- ===================================================== -->
+                <!-- MAIN CONTENT -->
+                <!-- ===================================================== -->
+
+                <VBox
+                    class="sapUiSmallMargin">
+
+
+                    <!-- ================================================= -->
+                    <!-- GENERAL INFORMATION -->
+                    <!-- ================================================= -->
+
+                    <VBox
+                        class="enterpriseSection contentCard">
+
+                        <HBox
+                            alignItems="Center"
+                            class="sectionHeader">
+
+                            <core:Icon
+                                src="sap-icon://detail-view"
+                                size="1.2rem"
+                                class="sapUiTinyMarginEnd" />
+
+                            <Title
+                                text="General Information"
+                                level="H2" />
+
+                        </HBox>
+
+
+                        <HBox
+                            wrap="Wrap"
+                            class="sapUiSmallMarginTop">
+
+
+                            <!-- BASIC INFORMATION -->
+                            <VBox
+                                width="48%"
+                                class="sapUiSmallMarginEnd">
+
+                                <Title
+                                    text="Purchase Order Details"
+                                    level="H4" />
+
+                                <VBox
+                                    class="fieldGroup sapUiSmallMarginTop">
+
+                                    <HBox class="fieldRow">
+
+                                        <Label
+                                            text="PO Number"
+                                            width="12rem" />
+
+                                        <Text
+                                            text="{detail>/poNumber}" />
+
+                                    </HBox>
+
+
+                                    <HBox class="fieldRow">
+
+                                        <Label
+                                            text="Supplier"
+                                            width="12rem" />
+
+                                        <Text
+                                            text="{detail>/supplierName}" />
+
+                                    </HBox>
+
+
+                                    <HBox class="fieldRow">
+
+                                        <Label
+                                            text="Company Code"
+                                            width="12rem" />
+
+                                        <Text
+                                            text="{detail>/companyCode}" />
+
+                                    </HBox>
+
+
+                                    <HBox class="fieldRow">
+
+                                        <Label
+                                            text="Purchasing Organization"
+                                            width="12rem" />
+
+                                        <Text
+                                            text="{detail>/purchasingOrg}" />
+
+                                    </HBox>
+
+
+                                    <HBox class="fieldRow">
+
+                                        <Label
+                                            text="Purchasing Group"
+                                            width="12rem" />
+
+                                        <Text
+                                            text="{detail>/purchasingGroup}" />
+
+                                    </HBox>
+
+
+                                    <HBox class="fieldRow">
+
+                                        <Label
+                                            text="Currency"
+                                            width="12rem" />
+
+                                        <Text
+                                            text="{detail>/currency}" />
+
+                                    </HBox>
+
+
+                                    <HBox class="fieldRow">
+
+                                        <Label
+                                            text="Document Date"
+                                            width="12rem" />
+
+                                        <Text
+                                            text="{detail>/documentDate}" />
+
+                                    </HBox>
+
+
+                                    <HBox class="fieldRow">
+
+                                        <Label
+                                            text="Delivery Date"
+                                            width="12rem" />
+
+                                        <Text
+                                            text="{detail>/deliveryDate}" />
+
+                                    </HBox>
+
+                                </VBox>
+
+                            </VBox>
+
+
+                            <!-- STATUS INFORMATION -->
+                            <VBox
+                                width="48%"
+                                class="sapUiSmallMarginBegin">
+
+                                <Title
+                                    text="Status Information"
+                                    level="H4" />
+
+                                <VBox
+                                    class="fieldGroup sapUiSmallMarginTop">
+
+                                    <HBox class="fieldRow">
+
+                                        <Label
+                                            text="Status"
+                                            width="12rem" />
+
+                                        <ObjectStatus
+                                            text="{detail>/status}"
+                                            state="{path:'detail>/status',formatter:'.statusState'}" />
+
+                                    </HBox>
+
+
+                                    <HBox class="fieldRow">
+
+                                        <Label
+                                            text="Approval Status"
+                                            width="12rem" />
+
+                                        <Text
+                                            text="{detail>/approvalStatus}" />
+
+                                    </HBox>
+
+
+                                    <HBox class="fieldRow">
+
+                                        <Label
+                                            text="Created By"
+                                            width="12rem" />
+
+                                        <Text
+                                            text="{detail>/createdBy}" />
+
+                                    </HBox>
+
+
+                                    <HBox class="fieldRow">
+
+                                        <Label
+                                            text="Created On"
+                                            width="12rem" />
+
+                                        <Text
+                                            text="{detail>/createdAt}" />
+
+                                    </HBox>
+
+
+                                    <HBox class="fieldRow">
+
+                                        <Label
+                                            text="Payment Terms"
+                                            width="12rem" />
+
+                                        <Text
+                                            text="{detail>/paymentTerms}" />
+
+                                    </HBox>
+
+
+                                    <HBox class="fieldRow">
+
+                                        <Label
+                                            text="Incoterms"
+                                            width="12rem" />
+
+                                        <Text
+                                            text="{detail>/incoterms}" />
+
+                                    </HBox>
+
+
+                                    <HBox class="fieldRow">
+
+                                        <Label
+                                            text="Reference"
+                                            width="12rem" />
+
+                                        <Text
+                                            text="{detail>/reference}" />
+
+                                    </HBox>
+
+                                </VBox>
+
+                            </VBox>
+
+                        </HBox>
+
+
+                        <!-- SUPPLIER INFORMATION -->
+
+                        <VBox
+                            class="sapUiMediumMarginTop">
+
+                            <Title
+                                text="Supplier Information"
+                                level="H4" />
+
+                            <HBox
+                                wrap="Wrap"
+                                class="supplierPanel sapUiSmallMarginTop">
+
+                                <VBox
+                                    width="48%">
+
+                                    <ObjectIdentifier
+                                        title="{detail>/supplierName}"
+                                        text="{detail>/supplierId}" />
+
+                                    <Text
+                                        text="{detail>/supplierAddress}"
+                                        class="sapUiTinyMarginTop" />
+
+                                </VBox>
+
+
+                                <VBox
+                                    width="48%"
+                                    class="sapUiSmallMarginBegin">
+
+                                    <HBox class="fieldRow">
+
+                                        <Label
+                                            text="Contact"
+                                            width="7rem" />
+
+                                        <Text
+                                            text="{detail>/supplierContact}" />
+
+                                    </HBox>
+
+                                    <HBox class="fieldRow">
+
+                                        <Label
+                                            text="Email"
+                                            width="7rem" />
+
+                                        <Text
+                                            text="{detail>/supplierEmail}" />
+
+                                    </HBox>
+
+                                    <HBox class="fieldRow">
+
+                                        <Label
+                                            text="Phone"
+                                            width="7rem" />
+
+                                        <Text
+                                            text="{detail>/supplierPhone}" />
+
+                                    </HBox>
+
+                                </VBox>
+
+                            </HBox>
+
+                        </VBox>
+
+
+                        <!-- FINANCIAL SUMMARY -->
+
+                        <HBox
+                            justifyContent="End"
+                            class="sapUiMediumMarginTop">
+
+                            <VBox
+                                width="25%"
+                                class="financialSummary">
+
+                                <Title
+                                    text="Financial Summary"
+                                    level="H4" />
+
+                                <HBox
+                                    justifyContent="SpaceBetween"
+                                    class="financialRow">
+
+                                    <Text
+                                        text="Net Value" />
+
+                                    <Text
+                                        text="{detail>/netValueDisplay}" />
+
+                                </HBox>
+
+                                <HBox
+                                    justifyContent="SpaceBetween"
+                                    class="financialRow">
+
+                                    <Text
+                                        text="GST (18%)" />
+
+                                    <Text
+                                        text="{detail>/taxDisplay}" />
+
+                                </HBox>
+
+                                <HBox
+                                    justifyContent="SpaceBetween"
+                                    class="financialRow totalRow">
+
+                                    <Text
+                                        text="Total Value" />
+
+                                    <Title
+                                        text="{detail>/totalDisplay}"
+                                        level="H3" />
+
+                                </HBox>
+
+                            </VBox>
+
+                        </HBox>
+
+                    </VBox>
+
+
+                    <!-- ================================================= -->
+                    <!-- ITEMS -->
+                    <!-- ================================================= -->
+
+                    <VBox
+                        class="enterpriseSection contentCard sapUiMediumMarginTop">
+
+                        <HBox
+                            alignItems="Center"
+                            justifyContent="SpaceBetween">
+
+                            <HBox
+                                alignItems="Center">
+
+                                <core:Icon
+                                    src="sap-icon://list"
+                                    size="1.2rem"
+                                    class="sapUiTinyMarginEnd" />
+
+                                <Title
+                                    text="Items"
+                                    level="H2" />
+
+                                <ObjectNumber
+                                    number="{= ${detail>/items}.length }"
+                                    unit="items"
+                                    class="sapUiSmallMarginBegin" />
+
+                            </HBox>
+
+                        </HBox>
+
+
+                        <Table
+                            items="{detail>/items}"
+                            class="sapUiSmallMarginTop"
+                            growing="true"
+                            growingThreshold="20"
+                            alternateRowColors="true">
+
+                            <columns>
+
+                                <Column width="5rem">
+                                    <Text text="Item" />
+                                </Column>
+
+                                <Column width="10rem">
+                                    <Text text="Material" />
+                                </Column>
+
+                                <Column>
+                                    <Text text="Description" />
+                                </Column>
+
+                                <Column
+                                    hAlign="End"
+                                    width="9rem">
+
+                                    <Text text="Quantity" />
+
+                                </Column>
+
+                                <Column
+                                    hAlign="End"
+                                    width="9rem">
+
+                                    <Text text="Unit Price" />
+
+                                </Column>
+
+                                <Column
+                                    hAlign="End"
+                                    width="10rem">
+
+                                    <Text text="Total" />
+
+                                </Column>
+
+                                <Column
+                                    width="8rem">
+
+                                    <Text text="Status" />
+
+                                </Column>
+
+                            </columns>
+
+
+                            <items>
+
+                                <ColumnListItem>
+
+                                    <cells>
+
+                                        <Text
+                                            text="{detail>itemNo}" />
+
+                                        <Text
+                                            text="{detail>material}" />
+
+                                        <Text
+                                            text="{detail>description}"
+                                            wrapping="true" />
+
+                                        <Text
+                                            text="{= ${detail>quantity} + ' ' + ${detail>unit} }"
+                                            textAlign="End" />
+
+                                        <Text
+                                            text="{= '₹ ' + Number(${detail>unitPrice}).toLocaleString('en-IN', {minimumFractionDigits: 2}) }"
+                                            textAlign="End" />
+
+                                        <Text
+                                            text="{= '₹ ' + Number(${detail>netValue}).toLocaleString('en-IN', {minimumFractionDigits: 2}) }"
+                                            textAlign="End" />
+
+                                        <ObjectStatus
+                                            text="{detail>status}"
+                                            state="{path:'detail>status',formatter:'.itemState'}" />
+
+                                    </cells>
+
+                                </ColumnListItem>
+
+                            </items>
+
+                        </Table>
+
+
+                        <!-- ITEM TOTAL -->
+
+                        <HBox
+                            justifyContent="End"
+                            class="sapUiMediumMarginTop">
+
+                            <VBox
+                                width="28%"
+                                class="financialSummary">
+
+                                <HBox
+                                    justifyContent="SpaceBetween"
+                                    class="financialRow">
+
+                                    <Text
+                                        text="Net Value" />
+
+                                    <Text
+                                        text="{detail>/netValueDisplay}" />
+
+                                </HBox>
+
+                                <HBox
+                                    justifyContent="SpaceBetween"
+                                    class="financialRow">
+
+                                    <Text
+                                        text="GST (18%)" />
+
+                                    <Text
+                                        text="{detail>/taxDisplay}" />
+
+                                </HBox>
+
+                                <HBox
+                                    justifyContent="SpaceBetween"
+                                    class="financialRow totalRow">
+
+                                    <Text
+                                        text="Total" />
+
+                                    <Title
+                                        text="{detail>/totalDisplay}"
+                                        level="H3" />
+
+                                </HBox>
+
+                            </VBox>
+
+                        </HBox>
+
+                    </VBox>
+
+
+                    <!-- ================================================= -->
+                    <!-- APPROVAL INFORMATION -->
+                    <!-- ================================================= -->
+
+                    <VBox
+                        class="enterpriseSection contentCard sapUiMediumMarginTop">
+
+                        <HBox
+                            alignItems="Center">
+
+                            <core:Icon
+                                src="sap-icon://approvals"
+                                size="1.2rem"
+                                class="sapUiTinyMarginEnd" />
+
+                            <Title
+                                text="Approval Information"
+                                level="H2" />
+
+                        </HBox>
+
+
+                        <VBox
+                            class="sapUiSmallMarginTop">
+
+                            <HBox
+                                wrap="Wrap">
+
+                                <VBox
+                                    width="48%"
+                                    class="approvalColumn sapUiSmallMarginEnd">
+
+                                    <HBox class="fieldRow">
+
+                                        <Label
+                                            text="Requester"
+                                            width="10rem" />
+
+                                        <Text
+                                            text="{detail>/createdBy}" />
+
+                                    </HBox>
+
+
+                                    <HBox class="fieldRow">
+
+                                        <Label
+                                            text="Approver"
+                                            width="10rem" />
+
+                                        <Text
+                                            text="{= ${detail>/approvals/0/approver} || 'Not assigned' }" />
+
+                                    </HBox>
+
+
+                                    <HBox class="fieldRow">
+
+                                        <Label
+                                            text="Approval Date"
+                                            width="10rem" />
+
+                                        <Text
+                                            text="{= ${detail>/approvals/0/createdOn} || 'Not available' }" />
+
+                                    </HBox>
+
+                                </VBox>
+
+
+                                <VBox
+                                    width="48%"
+                                    class="approvalColumn sapUiSmallMarginBegin">
+
+                                    <HBox class="fieldRow">
+
+                                        <Label
+                                            text="Approval Status"
+                                            width="10rem" />
+
+                                        <ObjectStatus
+                                            text="{detail>/approvalStatus}"
+                                            state="{path:'detail>/approvalStatus',formatter:'.statusState'}" />
+
+                                    </HBox>
+
+
+                                    <HBox class="fieldRow">
+
+                                        <Label
+                                            text="Comments"
+                                            width="10rem" />
+
+                                        <Text
+                                            text="{= ${detail>/approvals/0/comments} || 'No comments' }"
+                                            wrapping="true" />
+
+                                    </HBox>
+
+                                </VBox>
+
+                            </HBox>
+
+
+                            <!-- APPROVAL HISTORY -->
+
+                            <VBox
+                                class="sapUiMediumMarginTop">
+
+                                <Title
+                                    text="Approval History"
+                                    level="H4" />
+
+                                <List
+                                    items="{detail>/approvals}"
+                                    showSeparators="Inner"
+                                    class="sapUiSmallMarginTop">
+
+                                    <CustomListItem>
+
+                                        <HBox
+                                            width="100%"
+                                            alignItems="Center">
+
+                                            <core:Icon
+                                                src="{path:'detail>status',formatter:'.approvalIcon'}"
+                                                size="1.3rem"
+                                                class="sapUiSmallMarginEnd" />
+
+                                            <VBox>
+
+                                                <Text
+                                                    text="{detail>status}"
+                                                    class="sapUiTinyMarginBottom" />
+
+                                                <Text
+                                                    text="{= 'Approver: ' + (${detail>approver} || 'Not assigned') }"
+                                                    class="mutedText" />
+
+                                                <Text
+                                                    text="{= 'Date: ' + (${detail>createdOn} || 'Not available') }"
+                                                    class="mutedText" />
+
+                                                <Text
+                                                    text="{= 'Comments: ' + (${detail>comments} || 'No comments') }"
+                                                    wrapping="true"
+                                                    class="mutedText" />
+
+                                            </VBox>
+
+                                        </HBox>
+
+                                    </CustomListItem>
+
+                                </List>
+
+                            </VBox>
+
+                        </VBox>
+
+                    </VBox>
+
+
+                    <!-- ================================================= -->
+                    <!-- ACTIVITY -->
+                    <!-- ================================================= -->
+
+                    <VBox
+                        class="enterpriseSection contentCard sapUiMediumMarginTop">
+
+                        <HBox
+                            alignItems="Center">
+
+                            <core:Icon
+                                src="sap-icon://history"
+                                size="1.2rem"
+                                class="sapUiTinyMarginEnd" />
+
+                            <VBox>
+
+                                <Title
+                                    text="Activity"
+                                    level="H2" />
+
+                                <Text
+                                    text="Purchase Order Activity"
+                                    class="mutedText" />
+
+                            </VBox>
+
+                        </HBox>
+
+
+                        <!-- TIMELINE -->
+
+                        <List
+                            items="{detail>/activity}"
+                            showSeparators="None"
+                            noDataText="No activity recorded for this Purchase Order."
+                            class="activityTimeline sapUiSmallMarginTop">
+
+                            <CustomListItem>
+
+                                <HBox
+                                    width="100%"
+                                    alignItems="Start">
+
+                                    <!-- TIMELINE ICON -->
+
+                                    <VBox
+                                        width="3.5rem"
+                                        alignItems="Center">
+
+                                        <core:Icon
+                                            src="{path:'detail>normalizedAction',formatter:'.activityIcon'}"
+                                            size="1.4rem" />
+
+                                    </VBox>
+
+
+                                    <!-- TIMELINE CONTENT -->
+
+                                    <VBox
+                                        width="100%"
+                                        class="activityContent">
+
+                                        <Title
+                                            text="{path:'detail>normalizedAction',formatter:'.activityTitle'}"
+                                            level="H4" />
+
+                                        <Text
+                                            text="{path:'detail>changedAt',formatter:'.formatActivityDate'}"
+                                            class="mutedText" />
+
+                                        <Text
+                                            text="{= 'by ' + (${detail>displayChangedBy} || 'Unknown user') }"
+                                            class="sapUiTinyMarginTop" />
+
+                                        <Text
+                                            text="{= ${detail>fromStatus} ? ${detail>fromStatus} + ' → ' + ${detail>toStatus} : ${detail>toStatus} }"
+                                            class="mutedText sapUiTinyMarginTop" />
+
+                                        <VBox
+                                            visible="{= !!${detail>comment} }"
+                                            class="activityComment sapUiTinyMarginTop">
+
+                                            <Text
+                                                text="{= 'Comment: ' + ${detail>comment} }"
+                                                wrapping="true" />
+
+                                        </VBox>
+
+                                    </VBox>
+
+                                </HBox>
+
+                            </CustomListItem>
+
+                        </List>
+
+                    </VBox>
+
+
+                    <!-- ================================================= -->
+                    <!-- NOTES -->
+                    <!-- ================================================= -->
+
+                    <VBox
+                        class="enterpriseSection contentCard sapUiMediumMarginTop">
+
+                        <HBox
+                            alignItems="Center">
+
+                            <core:Icon
+                                src="sap-icon://notes"
+                                size="1.2rem"
+                                class="sapUiTinyMarginEnd" />
+
+                            <Title
+                                text="Notes"
+                                level="H2" />
+
+                        </HBox>
+
+
+                        <TextArea
+                            value="{detail>/note}"
+                            width="100%"
+                            rows="5"
+                            editable="false"
+                            class="sapUiSmallMarginTop" />
+
+                    </VBox>
+
+
+                    <!-- ================================================= -->
+                    <!-- ATTACHMENTS -->
+                    <!-- ================================================= -->
+
+                    <VBox
+                        class="enterpriseSection contentCard sapUiMediumMarginTop sapUiMediumMarginBottom">
+
+                        <HBox
+                            alignItems="Center">
+
+                            <core:Icon
+                                src="sap-icon://attachment"
+                                size="1.2rem"
+                                class="sapUiTinyMarginEnd" />
+
+                            <Title
+                                text="Attachments"
+                                level="H2" />
+
+                        </HBox>
+
+
+                        <IllustratedMessage
+                            illustrationType="sapIllus-NoDocuments"
+                            title="No attachments"
+                            description="Attachment upload can be connected to SAP Document Management."
+                            class="sapUiSmallMarginTop" />
+
+                    </VBox>
+
+                </VBox>
+
+            </VBox>
+
+        </content>
+
+    </Page>
+
+</mvc:View>

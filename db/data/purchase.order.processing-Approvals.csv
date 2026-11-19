@@ -1,0 +1,7 @@
+approvalId;poNumber;supplier;amount;createdBy;createdOn;approver;status;comments
+A-45000124;45000124;XYZ Supplies;74200;Sai Purnesh;2026-09-19;Procurement Manager;Pending;
+A-45000127;45000127;Tech Solutions;225000;Priya Sharma;2026-09-15;Procurement Manager;Pending;
+A-45000130;45000130;Tech Solutions;675000;Rahul Kumar;2026-09-10;Procurement Manager;Pending;
+A-45000131;45000131;ABS Labs;210000;Neha Singh;2026-09-08;Procurement Manager;Pending;
+A-45000133;45000133;Global Systems;560000;Arun Reddy;2026-09-05;Procurement Manager;Pending;
+A-45000123;45000123;ABC Technologies;850000;Sai Purnesh;2026-09-20;Procurement Manager;Approved;Approved

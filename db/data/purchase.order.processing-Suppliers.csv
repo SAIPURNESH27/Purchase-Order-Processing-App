@@ -1,0 +1,7 @@
+ID;name;city;contact;email;phone;address;status
+4600000264;ABC Technologies;Bengaluru;John Smith;john@abctech.com;+91 98765 43210;Bengaluru, Karnataka, India;Active
+4600000265;AV Parts Inc;Chennai;David Lee;david@avparts.com;+91 98765 11111;Chennai, Tamil Nadu, India;Active
+4600000266;ABS Labs;Hyderabad;Priya Mehta;priya@abslabs.com;+91 98765 22222;Hyderabad, Telangana, India;Active
+4600000267;Global Systems;Mumbai;Rahul Verma;rahul@globalsystems.com;+91 98765 33333;Mumbai, Maharashtra, India;Blocked
+4600000268;Metro Supplies;Pune;Anil Kumar;anil@metrosupplies.com;+91 98765 44444;Pune, Maharashtra, India;Active
+4600000269;Tech Solutions;Bengaluru;Neha Singh;neha@techsolutions.com;+91 98765 55555;Bengaluru, Karnataka, India;Active

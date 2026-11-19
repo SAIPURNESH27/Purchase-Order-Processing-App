@@ -1,0 +1,1037 @@
+<mvc:View
+    controllerName="purchaseorderprocessing.controller.Reports"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:vizData="sap.viz.ui5.data"
+    xmlns:vizFeeds="sap.viz.ui5.controls.common.feeds">
+
+    <Page
+        showHeader="false"
+        class="pageBackground">
+
+        <content>
+
+            <VBox class="sapUiSmallMargin">
+
+                <!-- =====================================================
+                     TOP APPLICATION TOOLBAR
+                     ===================================================== -->
+                <Toolbar class="appToolbar">
+
+                    <Button
+                        icon="sap-icon://nav-back"
+                        type="Transparent"
+                        press=".onBack"/>
+
+                    <Title
+                        text="Reports"/>
+
+                    <ToolbarSpacer/>
+
+                    <Button
+                        icon="sap-icon://refresh"
+                        type="Transparent"
+                        tooltip="Refresh"
+                        press=".onRefresh"/>
+
+                    <Avatar
+                        initials="SP"
+                        displaySize="XS"/>
+
+                </Toolbar>
+
+
+                <!-- =====================================================
+                     PAGE HEADER
+                     ===================================================== -->
+                <Toolbar class="reportPageHeader">
+
+                    <VBox class="reportHeaderContent">
+
+                        <Title
+                            text="Procurement Reports"
+                            level="H1"/>
+
+                        <Text
+                            text="Analyze purchase orders, supplier spend and procurement activity"
+                            class="smallText"/>
+
+                    </VBox>
+
+                    <ToolbarSpacer/>
+
+                    <Button
+                        text="Export"
+                        icon="sap-icon://excel-attachment"
+                        type="Transparent"
+                        press=".onExport"/>
+
+                </Toolbar>
+
+
+                <!-- =====================================================
+                     FILTER PANEL
+                     ===================================================== -->
+                <Panel
+                    class="filterPanel"
+                    expandable="false">
+
+                    <headerToolbar>
+
+                        <Toolbar class="filterHeaderToolbar">
+
+                            <Title
+                                text="Report Filters"
+                                level="H3"/>
+
+                            <Button
+                                icon="sap-icon://slim-arrow-down"
+                                type="Transparent"
+                                tooltip="Collapse Filters"
+                                press=".onToggleFilters"/>
+
+                            <ToolbarSpacer/>
+
+                        </Toolbar>
+
+                    </headerToolbar>
+
+                    <content>
+
+                        <HBox
+                            id="reportFilterContent"
+                            wrap="Wrap"
+                            alignItems="End"
+                            class="sapUiSmallMargin">
+
+                            <!-- From Date -->
+                            <VBox class="filterField">
+
+                                <Label
+                                    text="From Date"/>
+
+                                <DatePicker
+                                    value="{reports>/filters/fromDate}"
+                                    valueFormat="yyyy-MM-dd"
+                                    displayFormat="dd MMM yyyy"
+                                    width="12rem"/>
+
+                            </VBox>
+
+
+                            <!-- To Date -->
+                            <VBox class="filterField">
+
+                                <Label
+                                    text="To Date"/>
+
+                                <DatePicker
+                                    value="{reports>/filters/toDate}"
+                                    valueFormat="yyyy-MM-dd"
+                                    displayFormat="dd MMM yyyy"
+                                    width="12rem"/>
+
+                            </VBox>
+
+
+                            <!-- Supplier -->
+                            <VBox class="filterField">
+
+                                <Label
+                                    text="Supplier"/>
+
+                                <ComboBox
+                                    selectedKey="{reports>/filters/supplier}"
+                                    items="{reports>/suppliers}"
+                                    width="15rem">
+
+                                    <core:Item
+                                        key="{reports>ID}"
+                                        text="{reports>name}"/>
+
+                                </ComboBox>
+
+                            </VBox>
+
+
+                            <!-- Status -->
+                            <VBox class="filterField">
+
+                                <Label
+                                    text="Status"/>
+
+                                <ComboBox
+                                    selectedKey="{reports>/filters/status}"
+                                    width="13rem">
+
+                                    <core:Item
+                                        key=""
+                                        text="All"/>
+
+                                    <core:Item
+                                        key="Released"
+                                        text="Released"/>
+
+                                    <core:Item
+                                        key="Pending"
+                                        text="Pending"/>
+
+                                    <core:Item
+                                        key="Blocked"
+                                        text="Blocked"/>
+
+                                    <core:Item
+                                        key="Rejected"
+                                        text="Rejected"/>
+
+                                    <core:Item
+                                        key="Cancelled"
+                                        text="Cancelled"/>
+
+                                </ComboBox>
+
+                            </VBox>
+
+
+                            <!-- Company Code -->
+                            <VBox class="filterField">
+
+                                <Label
+                                    text="Company Code"/>
+
+                                <Input
+                                    value="{reports>/filters/companyCode}"
+                                    width="10rem"
+                                    placeholder="1000"/>
+
+                            </VBox>
+
+
+                            <!-- Apply -->
+                            <Button
+                                text="Apply"
+                                icon="sap-icon://filter"
+                                type="Emphasized"
+                                press=".onApplyFilters"
+                                class="sapUiSmallMarginBegin"/>
+
+
+                            <!-- Clear -->
+                            <Button
+                                text="Clear"
+                                type="Transparent"
+                                press=".onClearFilters"/>
+
+                        </HBox>
+
+                    </content>
+
+                </Panel>
+
+
+                <!-- =====================================================
+                     KPI CARDS
+                     ===================================================== -->
+                <HBox
+                    wrap="Wrap"
+                    class="sapUiSmallMarginTop sapUiTinyMarginBottom">
+
+                    <!-- Total Purchase Orders -->
+                    <VBox
+                        width="24%"
+                        class="metricCard sapUiTinyMarginEnd">
+
+                        <Text
+                            text="Total Purchase Orders"
+                            class="cardLabel"/>
+
+                        <ObjectNumber
+                            number="{reports>/kpis/totalOrders}"
+                            emphasized="true"
+                            state="None"
+                            class="sapUiTinyMarginTop"/>
+
+                        <Text
+                            text="Orders in selected period"
+                            class="smallText"/>
+
+                    </VBox>
+
+
+                    <!-- Total Spend -->
+                    <VBox
+                        width="24%"
+                        class="metricCard sapUiTinyMarginEnd">
+
+                        <Text
+                            text="Total Purchase Spend"
+                            class="cardLabel"/>
+
+                        <ObjectNumber
+                            number="{reports>/kpis/totalSpend}"
+                            unit="₹"
+                            emphasized="true"
+                            state="Information"
+                            class="sapUiTinyMarginTop"/>
+
+                        <Text
+                            text="Net value of purchase orders"
+                            class="smallText"/>
+
+                    </VBox>
+
+
+                    <!-- Average PO Value -->
+                    <VBox
+                        width="24%"
+                        class="metricCard sapUiTinyMarginEnd">
+
+                        <Text
+                            text="Average PO Value"
+                            class="cardLabel"/>
+
+                        <ObjectNumber
+                            number="{reports>/kpis/averagePO}"
+                            unit="₹"
+                            emphasized="true"
+                            state="None"
+                            class="sapUiTinyMarginTop"/>
+
+                        <Text
+                            text="Average order value"
+                            class="smallText"/>
+
+                    </VBox>
+
+
+                    <!-- Pending Approval -->
+                    <VBox
+                        width="24%"
+                        class="metricCard">
+
+                        <Text
+                            text="Pending Approval"
+                            class="cardLabel"/>
+
+                        <ObjectNumber
+                            number="{reports>/kpis/pending}"
+                            emphasized="true"
+                            state="Warning"
+                            class="sapUiTinyMarginTop"/>
+
+                        <Text
+                            text="Orders requiring action"
+                            class="smallText"/>
+
+                    </VBox>
+
+                </HBox>
+
+
+                <!-- =====================================================
+                     SECOND KPI ROW
+                     ===================================================== -->
+                <HBox
+                    wrap="Wrap"
+                    class="sapUiTinyMarginBottom">
+
+                    <!-- Released -->
+                    <VBox
+                        width="24%"
+                        class="metricCard sapUiTinyMarginEnd">
+
+                        <Text
+                            text="Released Orders"
+                            class="cardLabel"/>
+
+                        <ObjectNumber
+                            number="{reports>/kpis/released}"
+                            emphasized="true"
+                            state="Success"
+                            class="sapUiTinyMarginTop"/>
+
+                        <Text
+                            text="Approved and released"
+                            class="smallText"/>
+
+                    </VBox>
+
+
+                    <!-- Blocked -->
+                    <VBox
+                        width="24%"
+                        class="metricCard sapUiTinyMarginEnd">
+
+                        <Text
+                            text="Blocked Orders"
+                            class="cardLabel"/>
+
+                        <ObjectNumber
+                            number="{reports>/kpis/blocked}"
+                            emphasized="true"
+                            state="Error"
+                            class="sapUiTinyMarginTop"/>
+
+                        <Text
+                            text="Orders currently blocked"
+                            class="smallText"/>
+
+                    </VBox>
+
+
+                    <!-- Cancelled -->
+                    <VBox
+                        width="24%"
+                        class="metricCard sapUiTinyMarginEnd">
+
+                        <Text
+                            text="Cancelled Orders"
+                            class="cardLabel"/>
+
+                        <ObjectNumber
+                            number="{reports>/kpis/cancelled}"
+                            emphasized="true"
+                            state="None"
+                            class="sapUiTinyMarginTop"/>
+
+                        <Text
+                            text="Cancelled purchase orders"
+                            class="smallText"/>
+
+                    </VBox>
+
+
+                    <!-- Supplier Count -->
+                    <VBox
+                        width="24%"
+                        class="metricCard">
+
+                        <Text
+                            text="Active Suppliers"
+                            class="cardLabel"/>
+
+                        <ObjectNumber
+                            number="{reports>/kpis/supplierCount}"
+                            emphasized="true"
+                            state="Information"
+                            class="sapUiTinyMarginTop"/>
+
+                        <Text
+                            text="Suppliers in procurement"
+                            class="smallText"/>
+
+                    </VBox>
+
+                </HBox>
+
+
+                <!-- =====================================================
+                     CHART ROW 1
+                     ===================================================== -->
+                <HBox
+                    wrap="Wrap"
+                    class="sapUiSmallMarginTop">
+
+                    <!-- Monthly Purchase Spend -->
+                    <VBox
+                        width="59%"
+                        class="contentCard sapUiTinyMarginEnd">
+
+                        <Toolbar>
+
+                            <Title
+                                text="Monthly Purchase Spend"
+                                level="H3"/>
+
+                            <ToolbarSpacer/>
+
+                            <Text
+                                text="{reports>/year}"
+                                class="smallText"/>
+
+                        </Toolbar>
+
+
+                        <viz:VizFrame
+                            id="monthlySpendChart"
+                            vizType="column"
+                            width="100%"
+                            height="22rem"
+                            uiConfig="{applicationSet:'fiori'}"
+                            vizProperties="{
+                                'title': {
+                                    'visible': false
+                                },
+                                'legend': {
+                                    'visible': false
+                                },
+                                'plotArea': {
+                                    'dataLabel': {
+                                        'visible': true,
+                                        'showTotal': false
+                                    },
+                                    'gap': {
+                                        'visible': false
+                                    }
+                                },
+                                'valueAxis': {
+                                    'title': {
+                                        'visible': true,
+                                        'text': 'Purchase Spend'
+                                    }
+                                },
+                                'categoryAxis': {
+                                    'title': {
+                                        'visible': true,
+                                        'text': 'Month'
+                                    }
+                                }
+                            }">
+
+                            <viz:dataset>
+
+                                <vizData:FlattenedDataset
+                                    data="{reports>/monthlySpend}">
+
+                                    <vizData:dimensions>
+
+                                        <vizData:DimensionDefinition
+                                            name="Month"
+                                            value="{reports>month}"/>
+
+                                    </vizData:dimensions>
+
+                                    <vizData:measures>
+
+                                        <vizData:MeasureDefinition
+                                            name="Purchase Spend"
+                                            value="{reports>spend}"/>
+
+                                    </vizData:measures>
+
+                                </vizData:FlattenedDataset>
+
+                            </viz:dataset>
+
+                            <viz:feeds>
+
+                                <vizFeeds:FeedItem
+                                    uid="categoryAxis"
+                                    type="Dimension"
+                                    values="Month"/>
+
+                                <vizFeeds:FeedItem
+                                    uid="valueAxis"
+                                    type="Measure"
+                                    values="Purchase Spend"/>
+
+                            </viz:feeds>
+
+                        </viz:VizFrame>
+
+
+                        <Text
+                            text="{reports>/monthlySummary}"
+                            class="mutedText"/>
+
+                    </VBox>
+
+
+                    <!-- PO Status -->
+                    <VBox
+                        width="39%"
+                        class="contentCard">
+
+                        <Toolbar>
+
+                            <Title
+                                text="Purchase Order Status"
+                                level="H3"/>
+
+                            <ToolbarSpacer/>
+
+                            <Text
+                                text="{reports>/kpis/totalOrders} Total"
+                                class="smallText"/>
+
+                        </Toolbar>
+
+
+                        <viz:VizFrame
+                            id="statusChart"
+                            vizType="donut"
+                            width="100%"
+                            height="22rem"
+                            uiConfig="{applicationSet:'fiori'}"
+                            vizProperties="{
+                                'title': {
+                                    'visible': false
+                                },
+                                'legend': {
+                                    'visible': true,
+                                    'title': {
+                                        'visible': false
+                                    }
+                                },
+                                'plotArea': {
+                                    'dataLabel': {
+                                        'visible': true,
+                                        'showTotal': false
+                                    }
+                                }
+                            }">
+
+                            <viz:dataset>
+
+                                <vizData:FlattenedDataset
+                                    data="{reports>/statusData}">
+
+                                    <vizData:dimensions>
+
+                                        <vizData:DimensionDefinition
+                                            name="Status"
+                                            value="{reports>status}"/>
+
+                                    </vizData:dimensions>
+
+                                    <vizData:measures>
+
+                                        <vizData:MeasureDefinition
+                                            name="Orders"
+                                            value="{reports>count}"/>
+
+                                    </vizData:measures>
+
+                                </vizData:FlattenedDataset>
+
+                            </viz:dataset>
+
+                            <viz:feeds>
+
+                                <vizFeeds:FeedItem
+                                    uid="color"
+                                    type="Dimension"
+                                    values="Status"/>
+
+                                <vizFeeds:FeedItem
+                                    uid="size"
+                                    type="Measure"
+                                    values="Orders"/>
+
+                            </viz:feeds>
+
+                        </viz:VizFrame>
+
+                    </VBox>
+
+                </HBox>
+
+
+                <!-- =====================================================
+                     CHART ROW 2
+                     ===================================================== -->
+                <HBox
+                    wrap="Wrap"
+                    class="sapUiSmallMarginTop">
+
+                    <!-- Supplier Spend -->
+                    <VBox
+                        width="59%"
+                        class="contentCard sapUiTinyMarginEnd">
+
+                        <Toolbar>
+
+                            <Title
+                                text="Spend by Supplier"
+                                level="H3"/>
+
+                            <ToolbarSpacer/>
+
+                            <Text
+                                text="Top suppliers by spend"
+                                class="smallText"/>
+
+                        </Toolbar>
+
+
+                        <viz:VizFrame
+                            id="supplierSpendChart"
+                            vizType="bar"
+                            width="100%"
+                            height="24rem"
+                            uiConfig="{applicationSet:'fiori'}"
+                            vizProperties="{
+                                'title': {
+                                    'visible': false
+                                },
+                                'legend': {
+                                    'visible': false
+                                },
+                                'plotArea': {
+                                    'dataLabel': {
+                                        'visible': true,
+                                        'showTotal': false
+                                    }
+                                },
+                                'valueAxis': {
+                                    'title': {
+                                        'visible': true,
+                                        'text': 'Purchase Spend'
+                                    }
+                                },
+                                'categoryAxis': {
+                                    'title': {
+                                        'visible': true,
+                                        'text': 'Supplier'
+                                    }
+                                }
+                            }">
+
+                            <viz:dataset>
+
+                                <vizData:FlattenedDataset
+                                    data="{reports>/supplierSpend}">
+
+                                    <vizData:dimensions>
+
+                                        <vizData:DimensionDefinition
+                                            name="Supplier"
+                                            value="{reports>supplier}"/>
+
+                                    </vizData:dimensions>
+
+                                    <vizData:measures>
+
+                                        <vizData:MeasureDefinition
+                                            name="Purchase Spend"
+                                            value="{reports>spend}"/>
+
+                                    </vizData:measures>
+
+                                </vizData:FlattenedDataset>
+
+                            </viz:dataset>
+
+                            <viz:feeds>
+
+                                <vizFeeds:FeedItem
+                                    uid="categoryAxis"
+                                    type="Dimension"
+                                    values="Supplier"/>
+
+                                <vizFeeds:FeedItem
+                                    uid="valueAxis"
+                                    type="Measure"
+                                    values="Purchase Spend"/>
+
+                            </viz:feeds>
+
+                        </viz:VizFrame>
+
+                    </VBox>
+
+
+                    <!-- Procurement Summary -->
+                    <VBox
+                        width="39%"
+                        class="contentCard">
+
+                        <Toolbar>
+
+                            <Title
+                                text="Procurement Summary"
+                                level="H3"/>
+
+                        </Toolbar>
+
+
+                        <VBox class="sapUiSmallMargin">
+
+                            <HBox
+                                justifyContent="SpaceBetween"
+                                alignItems="Center"
+                                class="reportSummaryRow">
+
+                                <VBox>
+
+                                    <Text
+                                        text="Total Spend"
+                                        class="cardLabel"/>
+
+                                    <Text
+                                        text="Current selection"
+                                        class="smallText"/>
+
+                                </VBox>
+
+                                <ObjectNumber
+                                    number="{reports>/kpis/totalSpend}"
+                                    unit="₹"
+                                    emphasized="true"/>
+
+                            </HBox>
+
+
+                            <HBox
+                                justifyContent="SpaceBetween"
+                                alignItems="Center"
+                                class="reportSummaryRow">
+
+                                <VBox>
+
+                                    <Text
+                                        text="Average PO Value"
+                                        class="cardLabel"/>
+
+                                    <Text
+                                        text="Per purchase order"
+                                        class="smallText"/>
+
+                                </VBox>
+
+                                <ObjectNumber
+                                    number="{reports>/kpis/averagePO}"
+                                    unit="₹"/>
+
+                            </HBox>
+
+
+                            <HBox
+                                justifyContent="SpaceBetween"
+                                alignItems="Center"
+                                class="reportSummaryRow">
+
+                                <VBox>
+
+                                    <Text
+                                        text="Pending Approval"
+                                        class="cardLabel"/>
+
+                                    <Text
+                                        text="Requires action"
+                                        class="smallText"/>
+
+                                </VBox>
+
+                                <ObjectNumber
+                                    number="{reports>/kpis/pending}"
+                                    state="Warning"/>
+
+                            </HBox>
+
+
+                            <HBox
+                                justifyContent="SpaceBetween"
+                                alignItems="Center"
+                                class="reportSummaryRow">
+
+                                <VBox>
+
+                                    <Text
+                                        text="Released Orders"
+                                        class="cardLabel"/>
+
+                                    <Text
+                                        text="Ready for processing"
+                                        class="smallText"/>
+
+                                </VBox>
+
+                                <ObjectNumber
+                                    number="{reports>/kpis/released}"
+                                    state="Success"/>
+
+                            </HBox>
+
+
+                            <HBox
+                                justifyContent="SpaceBetween"
+                                alignItems="Center"
+                                class="reportSummaryRow">
+
+                                <VBox>
+
+                                    <Text
+                                        text="Blocked Orders"
+                                        class="cardLabel"/>
+
+                                    <Text
+                                        text="Needs review"
+                                        class="smallText"/>
+
+                                </VBox>
+
+                                <ObjectNumber
+                                    number="{reports>/kpis/blocked}"
+                                    state="Error"/>
+
+                            </HBox>
+
+                        </VBox>
+
+                    </VBox>
+
+                </HBox>
+
+
+                <!-- =====================================================
+                     DETAILED PURCHASE ORDER REPORT
+                     ===================================================== -->
+                <VBox
+                    class="contentCard sapUiSmallMarginTop">
+
+                    <Toolbar>
+
+                        <Title
+                            text="Purchase Order Report"
+                            level="H3"/>
+
+                        <ToolbarSpacer/>
+
+                        <Text
+                            text="{reports>/countText}"
+                            class="smallText"/>
+
+                    </Toolbar>
+
+
+                    <Table
+                        id="reportsTable"
+                        items="{reports>/items}"
+                        growing="true"
+                        growingThreshold="20"
+                        sticky="ColumnHeaders,HeaderToolbar"
+                        mode="None">
+
+                        <columns>
+
+                            <Column width="9rem">
+                                <Text text="PO Number"/>
+                            </Column>
+
+                            <Column width="13rem">
+                                <Text text="Supplier"/>
+                            </Column>
+
+                            <Column width="10rem">
+                                <Text text="Order Date"/>
+                            </Column>
+
+                            <Column width="9rem">
+                                <Text text="Company Code"/>
+                            </Column>
+
+                            <Column width="10rem">
+                                <Text text="Purchasing Org."/>
+                            </Column>
+
+                            <Column width="9rem">
+                                <Text text="Purchasing Group"/>
+                            </Column>
+
+                            <Column
+                                width="10rem"
+                                hAlign="End">
+                                <Text text="Net Value"/>
+                            </Column>
+
+                            <Column width="9rem">
+                                <Text text="Status"/>
+                            </Column>
+
+                            <Column width="11rem">
+                                <Text text="Approval Status"/>
+                            </Column>
+
+                            <Column width="7rem">
+                                <Text text="Currency"/>
+                            </Column>
+
+                            <Column width="12rem">
+                                <Text text="Created By"/>
+                            </Column>
+
+                        </columns>
+
+
+                        <items>
+
+                            <ColumnListItem
+                                type="Navigation"
+                                press=".onReportPOPress">
+
+                                <cells>
+
+                                    <Link
+                                        text="{reports>poNumber}"/>
+
+                                    <Text
+                                        text="{reports>supplierName}"/>
+
+                                    <Text
+                                        text="{reports>documentDate}"/>
+
+                                    <Text
+                                        text="{reports>companyCode}"/>
+
+                                    <Text
+                                        text="{reports>purchasingOrg}"/>
+
+                                    <Text
+                                        text="{reports>purchasingGroup}"/>
+
+                                    <ObjectNumber
+                                        number="{reports>netValue}"
+                                        unit="{reports>currency}"/>
+
+                                    <ObjectStatus
+                                        text="{reports>status}"
+                                        state="{path:'reports>status', formatter:'.statusState'}"/>
+
+                                    <ObjectStatus
+                                        text="{reports>approvalStatus}"
+                                        state="{path:'reports>approvalStatus', formatter:'.approvalState'}"/>
+
+                                    <Text
+                                        text="{reports>currency}"/>
+
+                                    <Text
+                                        text="{reports>createdBy}"/>
+
+                                </cells>
+
+                            </ColumnListItem>
+
+                        </items>
+
+                    </Table>
+
+                </VBox>
+
+
+                <!-- =====================================================
+                     REPORT FOOTER
+                     ===================================================== -->
+                <HBox
+                    justifyContent="SpaceBetween"
+                    class="sapUiSmallMarginTop sapUiSmallMarginBottom">
+
+                    <Text
+                        text="Procurement analytics based on Purchase Order data"
+                        class="mutedText"/>
+
+                    <Text
+                        text="{reports>/lastUpdated}"
+                        class="mutedText"/>
+
+                </HBox>
+
+            </VBox>
+
+        </content>
+
+    </Page>
+
+</mvc:View>
